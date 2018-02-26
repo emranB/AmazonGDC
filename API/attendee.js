@@ -5,7 +5,6 @@ Prize = require('../models/Prize');
 
 
 
-
 /**
  * GET /api/attendees
  * Get a list of all Attendees
@@ -230,7 +229,8 @@ var saveAttendeeDemo = function (req, res) {
             if (data == undefined) {
                 data = "Demo has already been viewed by Attendee";
             }
-            res.status(httpStatus.OK).send(data);
+            console.log(data);
+            res.redirect("/attendees");
         })
         .catch(function (error) {
             res.status(httpStatus.BAD_REQUEST);
@@ -252,10 +252,32 @@ var redeemPrize = function (req, res) {
     var getAttendeeRedemptions = function () {
         return Attendee.getAttendeeByBadgeId(badgeNumber, "redemptions")
             .then(function (redemptions) {
-                var redemptionIds = redemptions.maps(function (prize) {
+                var redemptionIds = redemptions.map(function (prize) {
                     return prize._id;
                 });
                 return redemptionIds;
+            })
+            .catch(function (error) {
+                throw error;
+            });
+    };
+    
+    /* Get available points that Attendee has not Redeemed */
+    var getAttendeePoints = function () {
+        return Attendee.getAttendeeByBadgeId(badgeNumber, "pointsCount")
+            .then(function (pointsCount) {
+                return pointsCount;
+            })
+            .catch(function (error) {
+                throw error;
+            });
+    };
+
+    /* Get Attendee info */
+    var getAttendee = function () {
+        return Attendee.getAttendeeByBadgeId(badgeNumber)
+            .then(function (attendee) {
+                return attendee;
             })
             .catch(function (error) {
                 throw error;
@@ -289,12 +311,32 @@ var redeemPrize = function (req, res) {
         .then(function (redemptionIds) {
             if (redemptionIds.indexOf(prizeId) == -1) {
                 return getPrizeInfo()
-                    .then(updateAttendeeRedemptions)
-                    .then(function () {
-                        res.redirect("/attendees");
-                    });
+                    .then(function (prizeInfo) {
+                        var prizePoints = prizeInfo.points;
+                        return getAttendeePoints()
+                            .then(function (attendeePoints) {
+                                if (attendeePoints >= prizePoints) {
+                                    return updateAttendeeRedemptions(prizeInfo)
+                                        .then(getAttendee)
+                                        .then(function (attendee) {
+                                            var obj = {
+                                                attendee: attendee,
+                                                prizeId: prizeInfo._id.toString()
+                                            };
+                                            return Prize.postPrizeUpdateRedemptions(obj);
+                                        })
+                                        .then(function () {
+                                            res.redirect("/attendees");
+                                        });
+                                } else {
+                                    console.log("Points Count: " + attendeePoints + " | Required: " + prizePoints);
+                                    res.redirect("/attendees");
+                                }
+                            })
+                    })
             } else {
-                res.send("User has already redeemed this prize");
+                console.log("Prize has already been redeemed by Attendee");
+                res.redirect("/attendees");
             }
         });
 };

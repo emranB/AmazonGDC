@@ -6,6 +6,12 @@ var uri = 'mongodb://localhost:27017/amazon_gdc';
 var connection = mongoose.connect(uri);
 
 
+/* Points rewarded for viewing a single Demo*/
+const DEMO_POINTS = 100;
+
+
+
+
 /** 
  * Define Schema
  **/
@@ -18,12 +24,12 @@ var AttendeeSchema = new Schema({
     email: String,
     phone: String,
     title: String,
-    comapny: String,
+    company: String,
     registrationStatus: Object,
     questionnaire: Object,
     demos: Object,
-    pointsAccumulated: String,
-    pointsCount: String,
+    pointsAccumulated: Number,
+    pointsCount: Number,
     redemptions: Object,
     extraQuestionnaire: String
 }, 
@@ -241,6 +247,10 @@ var postAttendeeDemo = function (data) {
                 {
                     $push: {
                         demos: demo
+                    },
+                    $inc: {
+                        pointsCount: DEMO_POINTS,
+                        pointsAccumulated: DEMO_POINTS
                     }
                 }
             )
@@ -250,13 +260,14 @@ var postAttendeeDemo = function (data) {
             .catch(function (error) {
                 throw error;
             });
-        } else {
-            console.log("Demo has already been viewed by Attendee");
-            return false;
         }
+        // else {
+        //     console.log("Demo has already been viewed by Attendee");
+        //     return false;
+        // }
     };
 
-    /* Chain promises together in final function call */
+    /* Chain promises together in final function calls */
     return getAttendeeDemoViews()
         .then(updateAttendeeDemoViews);
 
@@ -265,27 +276,21 @@ var postAttendeeDemo = function (data) {
 
 
 var postAttendeeRedemptions = function (badgeNumber, prizeInfo) {
-    console.log(badgeNumber, prizeInfo);
-    throw 'stop';
-    
+    var prizeObj = JSON.parse(JSON.stringify(prizeInfo));
+    delete prizeObj.imageKey;
+    delete prizeObj.inventory;
+    delete prizeObj.redemptions;
+
     return AttendeeModel.update(
         {badgeNumber: badgeNumber},
-
-
-
-
-
-
-        /**
-         * TODO:
-         * Update the REDEMPTIONS array for Attendee 
-         **/
-        prizeInfo
-
-
-
-
-
+        {
+            $push: {
+                redemptions: prizeObj
+            },
+            $inc: {
+                pointsCount: -prizeObj.points
+            } 
+        }
     )
     .then(function (data) {
         return data;

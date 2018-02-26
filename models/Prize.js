@@ -23,7 +23,7 @@ var PrizeSchema = new Schema({
         required: true
     },
     points: {
-        type: String,
+        type: Number,
         required: true
     },
     imageKey:  {
@@ -116,7 +116,7 @@ var postPrizeCreate = function (data) {
 var postPrizeUpdateRedemptions = function (data) {
     var attendee = data.attendee;
     var prizeId = data.prizeId;
-    
+
     if (!attendee || !prizeId)
         throw "Missing Attendee data or Prize ID";
 

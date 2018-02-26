@@ -1,4 +1,4 @@
-<div class="row dark-blue-bg full-screen-height-size body" ng-controller="PrizeController">
+<div class="row full-screen-height-size body" ng-controller="PrizeController">
     
         <div class="row body-top-segment">
             
@@ -8,7 +8,7 @@
                 <button ng-click="logout()" class="ghost-button-1 logout-button"> Logout </button>
             </div>
                 
-            <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 full-screen-width-size upper segment text-centered box-shadowed dark-green-bg">
+            <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 full-screen-width-size upper segment text-centered box-shadowed">
                 
                 <h1 class="font-4 white text-shadowed"> {{header.title}} </h1>
                 <p class="font-5"> {{header.subTitle}} <hr></p>
@@ -24,7 +24,8 @@
                     
                 <!-- IF Showing Demos -->
                 <div class="row tile-container prizes-container" id="prizes-container" ng-show="prizes.length && showPrizes">
-                    <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="prize({prizeId: '{{item._id}}' })" ng-repeat="item in prizes">
+                    <a class="tile" ng-class="" ui-sref="prize({prizeId: '{{item._id}}' })" ng-repeat="item in prizes">
+                    <!-- <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="prize({prizeId: '{{item._id}}' })" ng-repeat="item in prizes"> -->
                         <div class="title font-6"> {{item.title}}  </div>
                         <hr>
                         <div class="team padded font-1"> Points: {{item.points}} </div>
@@ -90,6 +91,14 @@
                         </ul>
                     </div>
                 </div>
+
+                
+
+                <!-- <form action="/api/prize/id/5a9437b016205a85d7dd24ab/attendee/123456789/redemption" method="POST">
+                    <input type="submit" value="Redeem Prize" />
+                </form> -->
+
+
                     
             </div>
         </div>

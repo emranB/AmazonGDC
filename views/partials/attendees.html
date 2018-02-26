@@ -1,4 +1,4 @@
-<div class="row dark-blue-bg full-screen-height-size body" ng-controller="AttendeeController">
+<div class="row full-screen-height-size body" ng-controller="AttendeeController">
 
         <div class="row body-top-segment">
             <!-- IF User is logged in, show session options -->
@@ -7,9 +7,9 @@
                 <button ng-click="logout()" class="ghost-button-1 logout-button"> Logout </button>
             </div>
 
-            <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 full-screen-width-size upper segment text-centered box-shadowed dark-green-bg">
+            <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 full-screen-width-size upper segment text-centered box-shadowed">
                 
-                <h1 class="font-4 white text-shadowed"> {{header.title}} </h1>
+                <h1 class="font-4 dark-orange text-shadowed"> {{header.title}} </h1>
                 <p class="font-5"> {{header.subTitle}} <hr></p>
     
                 <!-- Page Options -->
@@ -61,6 +61,15 @@
                             <ul class="padded">
                                 <li ng-repeat="demo in item.demos">
                                     {{demo._id}} - {{demo.title}}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="description padded font-1" ng-show="showExtended"> 
+                            Prizes Redeemed: 
+                            <ul class="padded">
+                                <li ng-repeat="prize in item.redemptions">
+                                    {{prize._id}} - {{prize.title}} - {{prize.points}} points
                                 </li>
                             </ul>
                         </div>
@@ -134,10 +143,20 @@
                 </div>
 
 
-                <form action="/api/attendee/badgeId/test_badgeNumber/redeemPrize/5a9053b2d62f7c45b5aece1d">
+
+                <!-- ...................................... Testing Loggin Demo for Attendee ...................................... -->
+                <!-- <form action="/api/attendee/badgeId/test_badgeNumber/demo/5a905621d62f7c45b5aece1f" method="POST">
+                    <input type="submit" value="Post Demo for Attendee" />
+                </form> -->
+                <!-- .............................................................................................................. -->
+
+                <!-- ............................................ Testing Redeeming Prize ............................................ -->
+                <!-- <form action="/api/attendee/badgeId/test_badgeNumber/redeemPrize/5a944edbb322b292ae169d8f" method="POST">
                     <input type="submit" value="submit">
-                </form>
+                </form> -->
+                <!-- ................................................................................................................. -->
                     
+
                 
             </div>
         </div>
