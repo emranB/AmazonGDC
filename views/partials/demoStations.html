@@ -1,0 +1,98 @@
+<div class="row dark-blue-bg full-screen-height-size body" ng-controller="DemoStationController">
+    
+    <!-- IF User is logged in, show session options -->
+    <div id="sessionOptionsContainer" class="sessionOptionsContainer"> 
+        <p> Logged in as:  {{user.username}} </p>
+        <button ng-click="logout()" class="ghost-button-1 logout-button"> Logout </button>
+    </div>
+                
+    <div class="row body-top-segment">
+        <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 full-screen-width-size upper segment text-centered box-shadowed dark-green-bg">
+            
+            <h1 class="font-4 white text-shadowed"> {{header.title}} </h1>
+            <p class="font-5"> {{header.subTitle}} <hr></p>
+
+            <!-- Page Options -->
+            <div class="row tile-container demos-container" id="demos-container" ng-show="!showDemoStations && !createDemoStation">
+                <a class="col-lg-3 col-md-3 col-sm-12 col-xs-12 tile" ng-click="(option.action)()" ng-repeat="option in pageOptions">
+                    <div class="title font-6"> {{option.title}}  </div>
+                    <hr>
+                    <div class="description padded font-1"> {{option.description}} </div>
+                </a>
+            </div>
+                
+            <!-- IF Showing Demos Stations -->
+            <div class="row tile-container demos-container" id="demos-container" ng-show="demoStations.length && showDemoStations">
+                <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="demoStation({demoStationId: '{{item._id}}' })" ng-repeat="item in demoStations">
+                    <div class="description padded font-1"> Affiliated Demo:  </div>
+                    <div class="title font-6"> {{item.demo.title}}  </div>
+                    <hr>
+                    <div class="team padded font-1" ng-show="showExtended"> Demo Station ID: {{item._id}}  </div>
+                    <div class="team padded font-1" ng-show="showExtended"> Demo ID: {{item.demo._id}}  </div>
+                    <div class="team padded font-1"> Demo Team: {{item.demo.team}}  </div>
+                    <div class="category padded font-1"> Demo Category: {{item.demo.team}} </div>
+                    <div class="description padded font-1"> {{item.demo.description}} </div>
+                </a>
+            </div>
+
+            <!-- IF Creating a new Demo -->
+            <div class="row form-container" id="demoStations-container" ng-show="createDemoStation">
+                <form>
+                    <div class="row field">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Affiliated Demo:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
+                            <select ng-model="affiliatedDemo" name="affiliatedDemo" id="affiliatedDemo" ng-options="demo.title for demo in demos">
+                                <option value="" disabled>Select One</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row field">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <input class="full-width-size form-submit" type="submit" ng-click="submitNewDemoStation(affiliatedDemo)" value="Submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- IF Error messages -->
+            <div class="row errorMessageContainer" ng-show="errorMessage.show">
+                <a ng-click="showDemoStations = false; createDemo = false; errorMessage.show = false;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
+                    <div class="title font-6"> {{errorMessage.title}}  </div>
+                    <hr>
+                    <ul class="description padded font-1">
+                        <li ng-repeat="row in errorMessage.description">{{row}}</li>
+                    </ul>
+                </a>
+            </div>
+                
+        </div>
+    </div>
+
+    <!-- Bottom Nav-Bar -->
+    <div class="row body-bottom-segment full-screen-width-size">
+        <a ui-sref="demos" ui-sref-opts="{reload: true}" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> 
+                DEMOS
+            </div>
+        </a>
+        <a ui-sref="demoStations" ui-sref-opts="{reload: true}" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card selected">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> 
+                DEMO STATIONS
+            </div>
+        </a>
+        <a ui-sref="attendees" ui-sref-opts="{reload: true}" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> 
+                ATTENDEES
+            </div>
+        </a>
+        <a ui-sref="prizes" ui-sref-opts="{reload: true}" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> 
+                PRIZES
+            </div>
+        </a>
+    </div>
+
+</div>
+    
+                

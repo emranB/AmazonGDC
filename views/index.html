@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>AMAZON GDC - Admin Dashboard</title>
+
+    <base href="/">
+
+    <!-- jQuery -->
+    <script src="/node_modules/jquery/dist/jquery.js"></script>
+
+
+    <!-- Angular JS -->
+    <script src="/node_modules/angular/angular.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/bower_components/angular-animate/angular-animate.js"></script>
+
+    <!-- Angular JS Anim-In-Out -->
+    <link rel="stylesheet" href="/bower_components/angular-ui-router-anim-in-out/css/anim-in-out.css">
+    <script src="/bower_components/angular-ui-router-anim-in-out/anim-in-out.js"></script>
+    
+    <!-- BootStrap -->
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    
+    <!-- Custom Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Chivo|Quattrocento+Sans|Rajdhani|Teko|Electrolize|Arbutus+Slab|Halant|Rasa" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/custom.css">
+    <script src="/js/custom.js"></script>
+
+    <!-- Include Controllers -->
+    <script src="/controllers/index.js"></script>
+    <script src="/controllers/HomeController.js"></script>
+    <script src="/controllers/LoginController.js"></script>
+    <script src="/controllers/DemoController.js"></script>
+    <script src="/controllers/DemoStationController.js"></script>
+    <script src="/controllers/AttendeeController.js"></script>
+    <script src="/controllers/PrizeController.js"></script>
+</head>
+
+
+
+<body>
+    
+    <div ng-app="app" class="outer-container container-fluid full-screen-width">
+        <!-- <div class="page-transition anim-in-out anim-fade anim-slide-below"  data-anim-speed="500" ui-view></div> -->
+        <div class="page-transition" ui-view></div>
+    </div>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- -------------------------------------------------------------------------------------------------------- -->
+
+
+
+
+<!-- <h1>AMAZON AWS - Admin Access Successful!</h1> -->
+
+<!-- <hr><br> -->
+
+<!-- Create Demos -->
+<!-- <form action="/demo" method="POST">
+    <input type="text" name="title" placeholder="title" value="test_Title2" /> <br>
+    <input type="text" name="team" placeholder="team" value="test_Team2" /> <br>
+    <input type="text" name="category" placeholder="category" value="test_Category2" /> <br>
+    <input type="text" name="description" placeholder="description" value="test_Description2" /> <br>
+    <br>
+    <input type="submit" value="Post Demo" />
+</form> -->
+
+
+
+<!-- Create DemoStations -->
+<!-- <form action="/demoStation" method="POST">
+    Demo Id: 
+    <br>
+    <input type="text" name="demoId" placeholder="Demo Id" value="5a81d674805688466bea81cc" /> 
+    <br>
+    <input type="submit" value="Post DemoStation" />
+</form> -->
+
+
+
+<!-- Test Creating a new Prize -->
+<!-- <form action="/api/prize" method="POST">
+    <input type="text" name="title" placeholder="Title" value="test_Prize" /> <br>
+    <input type="number" name="points" placeholder="Points" value="100" /> <br>
+    <input type="text" name="imageKey" placeholder="Image Key" value="test_ImageKey" /> <br>
+    <input type="submit" value="Post DemoStation" />
+</form> -->
+
+<!-- Testing Prize Redemtion -->
+<!-- <form action="/api/prize/id/5a85a5fd362a5cc98ac83b44/attendee/8046701A0F4704/redemption" method="POST">
+    <input type="submit" value="Redeem Prize" />
+</form> -->
+
+
+<!-- Test Attendee -->
+<!-- <form action="/api/attendee" method="POST">
+
+    Basic Info: <br>
+    <input type="text" name="badgeNumber" placeholder="badgeNumber" value="test_badgeNumber" /> <br>
+    <input type="text" name="firstname" placeholder="firstname" value="test_firstname" /> <br>
+    <input type="text" name="lastname" placeholder="lastname" value="test_lastname" /> <br>
+    <input type="text" name="email" placeholder="email" value="test_email" /> <br>
+    <input type="text" name="phone" placeholder="phone" value="test_phone" /> <br>
+    <input type="text" name="title" placeholder="title" value="test_title" /> <br>
+    <input type="text" name="company" placeholder="company" value="test_company" /> <br>
+    <hr>
+
+    Registration Status: <br>
+    registrationStatus_scanned - &nbsp; <input type="checkbox" name="registrationStatus_scanned" placeholder="registrationStatus_scanned" /> <br>
+    registrationStatus_terms - &nbsp; &nbsp; &nbsp; <input type="checkbox" name="registrationStatus_terms" placeholder="registrationStatus_terms" /> <br>
+    registrationStatus_scanned - &nbsp; <input type="checkbox" name="registrationStatus_scanned" placeholder="registrationStatus_scanned" /> <br>
+    registrationStatus_question1 - <input type="checkbox" name="registrationStatus_answer1" placeholder="registrationStatus_question1" /> <br>
+    registrationStatus_question2 - <input type="checkbox" name="registrationStatus_answer2" placeholder="registrationStatus_question2" /> <br>
+    registrationStatus_question3 - <input type="checkbox" name="registrationStatus_answer3" placeholder="registrationStatus_question3" /> <br>
+    registrationStatus_question4 - <input type="checkbox" name="registrationStatus_answer4" placeholder="registrationStatus_question4" /> <br>
+    registrationStatus_question5 - <input type="checkbox" name="registrationStatus_answer5" placeholder="registrationStatus_question5" /> <br>
+    registrationStatus_question6 - <input type="checkbox" name="registrationStatus_answer6" placeholder="registrationStatus_question6" /> <br>
+    registrationStatus_complete - <input type="checkbox" name="registrationStatus_complete" placeholder="registrationStatus_complete" /> <br>
+    <hr>
+
+    Questionnaire: <br>
+    Question1 - <input type="text" name="questionnaire_answer1" placeholder="questionnaire" value="answer1" /> <br>
+    Question2 - <input type="text" name="questionnaire_answer2" placeholder="questionnaire" value="answer2" /> <br>
+    Question3 - <input type="text" name="questionnaire_answer3" placeholder="questionnaire" value="answer3" /> <br>
+    Question4 - <input type="text" name="questionnaire_answer4" placeholder="questionnaire" value="answer4" /> <br>
+    Question5 - <input type="text" name="questionnaire_answer5" placeholder="questionnaire" value="answer5" /> <br>
+    Question6 - <input type="text" name="questionnaire_answer6" placeholder="questionnaire" value="answer6" /> <br>
+    <hr>
+
+    Demos: <br>
+    Demo1 - <input type="checkbox" name="demo1" /> <br>
+    Demo2 - <input type="checkbox" name="demo2" /> <br>
+    Demo3 - <input type="checkbox" name="demo3" /> <br>
+    Demo4 - <input type="checkbox" name="demo4" /> <br>
+    Demo5 - <input type="checkbox" name="demo5" /> <br>
+    <hr>
+
+    Prizes: <br>
+    <input type="number" name="pointsAccumulated" placeholder="pointsAccumulated" value="100" /> <br>
+    <input type="number" name="pointsCount" placeholder="pointsCount" value="100" /> <br>
+    <input type="text" name="redemptions" placeholder="redemptions" value="test_redemptions" /> <br>
+    <input type="text" name="extraQuestionnaire" placeholder="extraQuestionnaire" value="test_extraQuestionnaire" /> <br>
+    <hr>
+
+    <input type="submit" value="Post DemoStation" />
+</form> -->
+
+
+
+<!-- Test Attendee -->
+<!-- <form action="/api/attendee/badgeId/8046701A0F4704/registrationStatus" method="POST">
+    <input type="text" name="scanned" value="true"> - scanned <br>
+    <input type="text" name="terms" value="true"> - terms <br>
+    <input type="text" name="answer_0" value="answer1"> -  answer_0 <br>
+    <input type="text" name="answer_1" value="answer2"> -  answer_1 <br>
+    <input type="text" name="answer_2" value="answer3"> -  answer_2 <br>
+    <input type="text" name="answer_3" value="answer4"> -  answer_3 <br>
+    <input type="text" name="answer_4" value="answer5"> -  answer_4 <br>
+    <input type="text" name="complete" value="true"> -  complete <br>
+    <input type="submit" value="Post Attendee" />
+</form> -->
+
+
+<!-- Test Loggind Demo for an Attendee -->
+<!-- <form action="/api/attendee/badgeId/8046701A0F4704/demo/5a81d48c5ca655463a501202" method="POST">
+    <input type="submit" value="Post Demo for Attendee" />
+</form> -->

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ITN Badge Data Service Demo</string>
+    <string name="action_settings">Settings</string>
+    <string name="get_badge_data">Get Badge Data</string>
+    <string name="card_ids">Card ID\'s</string>
+    <string name="account_id">Account ID</string>
+    <string name="event_id">Event ID</string>
+    <string name="stored_uid">Stored UID</string>
+    <string name="contact_details">Contact Details</string>
+    <string name="salutation">Salutation</string>
+    <string name="first_name">First Name</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="suffix">Suffix</string>
+    <string name="job_title">Job Title</string>
+    <string name="company">Company</string>
+    <string name="division">Division</string>
+    <string name="email">Email</string>
+    <string name="url">URL</string>
+    <string name="address_and_phone">Address and Phone</string>
+    <string name="address1">Address 1</string>
+    <string name="address2">Address 2</string>
+    <string name="address3">Address 3</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="postal_code">Zip/Postal</string>
+    <string name="country">Country</string>
+    <string name="tel_code">Tel Code</string>
+    <string name="phone">Phone</string>
+    <string name="mobile">Mobile</string>
+    <string name="fax">Fax</string>
+    <string name="feedback">...</string>
+    <string name="touch_bcard">Touch BCARD</string>
+    <string name="result">Result:/u0020</string>
+    <string name="error_not_bcard">Error, tag is not BCARD formatted.</string>
+    <string name="error_decrypting">Error decrypting badge data. Check connectivity and try again.</string>
+    <string name="error_reading_badge">Error reading badge.</string>
+    <string name="sending_to_service">Sending to service...</string>
+    <string name="badge_returned_successfully">Badge returned successfully.</string>
+
+</resources>

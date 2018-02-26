@@ -1,0 +1,35 @@
+<div ng-controller="HomeController">
+
+    <div class="row body-top-segment">
+        <!-- IF User is logged in, show session options -->
+        <div id="sessionOptionsContainer" class="sessionOptionsContainer"> 
+            <p> Logged in as:  {{user.username}} </p>
+            <button ng-click="logout()" class="ghost-button-1 logout-button"> Logout </button>
+        </div>
+        <!-- Header Dashboard -->
+        <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 upper segment text-centered box-shadowed dark-green-bg">
+            <h1 class="font-4 white text-shadowed" style="margin-top: 10%;">DASHBOARD</h1>
+            <p class="font-5">Select an option below <hr></p>
+        </div>
+    </div>
+
+        
+    <div class="row body-bottom-segment">
+        <a ui-sref="demos" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> DEMOS </div>
+        </a>
+        <a ui-sref="demoStations" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> DEMO STATIONS </div>
+        </a>
+        <a ui-sref="attendees" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> ATTENDEES </div>
+        </a>
+        <a ui-sref="prizes" class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-centered segment font-4 white card">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-centered"> PRIZES </div>
+        </a>
+    </div>
+
+</div>
+    
+
+    

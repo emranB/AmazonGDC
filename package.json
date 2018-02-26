@@ -1,0 +1,30 @@
+{
+  "name": "index.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@uirouter/angularjs": "latest",
+    "@uirouter/visualizer": "latest",
+    "angular": "^1.6.9",
+    "bootstrap": "^4.0.0",
+    "circular-json": "^0.5.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "http-status-codes": "^1.3.0",
+    "jsdom": "^11.6.2",
+    "mongoose": "^5.0.3",
+    "nodemon": "^1.15.1",
+    "popper.js": "^1.12.9",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "tracer": "^0.8.12"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "index.js",
+  "description": "",
+  "main": "index.js",
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-router-anim-in-out": "^1.0.2",
+    "angular-ui-router": "^1.0.15"
+  }
+}
