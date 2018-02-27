@@ -27,6 +27,9 @@ body {
     100% { background-color: #e74c3c; } */
   }
   
+.ng-hide.ng-hide-animate {
+    display: none !important;
+}
 /****************** Fonts *******************/
 .font-1 {
     font-family: 'Chivo', sans-serif;
@@ -198,12 +201,13 @@ body {
 .field {
     padding: 5px;
 }
-.field input[type=text], .field input[type=password], .field input[type=number],  .field textarea {
+.field input[type=text], .field input[type=password], .field input[type=number],  .field textarea, .field select {
     border: 2px solid white;
     border-radius: 10px;
     background: transparent;
     color: black;
     padding: 0 10px;
+    width: 100%;
 }
 .field input[type=text]:focus, .field input[type=password]:focus, .field input[type=number]:focus, .field textarea:focus {
     background: white;
@@ -263,17 +267,18 @@ body {
 .tile-container {
     display: inline-block;
     width: 100%;
-    max-height: 58vh;
+    height: 65vh;
     text-align: left;
-    padding: 50px 0;
+    padding: 2%;
+    overflow: auto;
 }
-.tile {
-    margin: 20px;
-    padding: 15px;    
+a.tile {
+    margin: 2.5%;
+    padding: 2%;    
     display: inline-block;
+    width: 28.33%;
     vertical-align: middle;
     background: #ff9f1a;
-    /* height: auto; */
     border:  0 solid white;
     box-shadow: 3px 3px 3px black;
     -webkit-transition: all 0.2s ease;
@@ -282,10 +287,26 @@ body {
     -o-transition: all 0.2s ease;
     overflow: auto;
     max-height: 58vh;
-    min-width: 400px;
     text-decoration: none;
 }
-.tile:hover {
+div.tile {
+    margin: 2.5%;
+    padding: 2%;    
+    display: block;
+    width: 95%;
+    vertical-align: middle;
+    background: #ff9f1a;
+    border:  0 solid white;
+    box-shadow: 3px 3px 3px black;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    overflow: auto;
+    max-height: 50vh;
+    text-decoration: none;
+}
+a.tile:hover {
     text-decoration: none;
     background: #ff3838;
     -webkit-transition: all 0.2s ease;
@@ -313,8 +334,9 @@ body {
     font-size: 0.8em;
 }
 
-.errorMessageContainer {
-
+.errorMessageContainer div {
+    text-align: left;
+    background: red;
 }
 
 /************ Demos **************/

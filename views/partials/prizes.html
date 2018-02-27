@@ -24,23 +24,45 @@
                     
                 <!-- IF Showing Demos -->
                 <div class="row tile-container prizes-container" id="prizes-container" ng-show="prizes.length && showPrizes">
-                    <a class="tile" ng-class="" ui-sref="prize({prizeId: '{{item._id}}' })" ng-repeat="item in prizes">
-                    <!-- <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="prize({prizeId: '{{item._id}}' })" ng-repeat="item in prizes"> -->
+                    <a ng-hide="showExtended" class="tile" ng-class="" ui-sref="prize({prizeId: '{{item._id}}' })" ng-repeat="item in prizes">
                         <div class="title font-6"> {{item.title}}  </div>
                         <hr>
-                        <div class="team padded font-1"> Points: {{item.points}} </div>
-                        <div class="team padded font-1" ng-hide="showExtended"> Redemtions: {{item.redemptions.length}} </div>
-                        <div class="team padded font-1" ng-show="showExtended"> 
+                        <div class="row padded description font-1">
+                            <div class="col-2"> Points: </div>
+                            <div class="col-10"> {{item.points}} </div>
+                        </div>
+                        <div class="row padded description font-1">
+                            <div class="col-2"> Inventory: </div>
+                            <div class="col-10"> {{item.inventory.length}} </div>
+                        </div>
+                        <div class="row padded description font-1">
+                            <div class="col-2"> Redemtions: </div>
+                            <div class="col-10"> {{item.redemptions.length}} </div>
+                        </div>
+                    </a>
+                    <div ng-show="showExtended" class="tile" ng-repeat="item in prizes">
+                        <div class="title font-6"> {{item.title}}  </div>
+                        <hr>
+                        <div class="row padded description font-1">
+                            <div class="col-2"> Points: </div>
+                            <div class="col-10"> {{item.points}} </div>
+                        </div>
+                        <div class="description padded font-1" ng-show="showExtended"> 
                             Redemtions:
                             <ul class="padded">
                                 <li class="description font-1" ng-repeat="redemption in item.redemptions"> 
-                                    Badge Number: ({{redemption.badgeNumber}}) <br>
-                                    - {{redemption.firstName}} {{redemption.lastName}} 
+                                    <div class="row padded description font-1">
+                                        <div class="col-2"> Badge Number: </div>
+                                        <div class="col-10"> {{redemption.badgeNumber}} </div>
+                                    </div>
+                                    <div class="row padded description font-1">
+                                        <div class="col-2"> {{redemption.firstName}} {{redemption.lastName}} </div>
+                                        <div class="col-10"> {{redemption.firstName}} {{redemption.lastName}} </div>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
-                        <div class="team padded font-1" ng-hide="showExtended"> Inventory: {{item.inventory.length}} </div>
-                        <div class="team padded font-1" ng-show="showExtended"> 
+                        <div class="description padded font-1" ng-show="showExtended"> 
                             Inventory:
                             <ul class="padded">
                                 <li class="description font-1" ng-repeat="invention in item.inventory"> 
@@ -48,7 +70,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </a>
+                    </div>
                 </div>
     
                 <!-- IF Creating a new Demo -->
@@ -83,7 +105,7 @@
     
                 <!-- IF Error messages -->
                 <div class="row errorMessageContainer" ng-show="errorMessage.show">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
+                    <div class="tile">
                         <div class="title font-6"> {{errorMessage.title}}  </div>
                         <hr>
                         <ul class="description padded font-1">

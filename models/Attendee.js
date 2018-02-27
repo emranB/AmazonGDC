@@ -6,7 +6,7 @@ var uri = 'mongodb://localhost:27017/amazon_gdc';
 var connection = mongoose.connect(uri);
 
 
-/* Points rewarded for viewing a single Demo*/
+/* Points rewarded for viewing a single Demo */
 const DEMO_POINTS = 100;
 
 

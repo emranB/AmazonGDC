@@ -23,7 +23,13 @@
                     
                 <!-- IF Showing Demos Stations -->
                 <div class="row tile-container demos-container" id="demos-container" ng-show="attendees.length && showAttendees">
-                    <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'"  ui-sref="attendee({attendeeId: '{{item._id}}' })" ng-repeat="item in attendees track by item._id">
+                    <a ng-hide="showExtended" class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'"  ui-sref="attendee({attendeeId: '{{item._id}}' })" ng-repeat="item in attendees track by item._id">
+                        <div class="title font-6"> {{item.firstName}} {{item.lastName}} </div>
+                        <hr>
+                        <div class="description padded font-1"> Email: {{item.email}}  </div>
+                        <div class="description padded font-1"> Phone: {{item.phone}} </div>
+                    </a>
+                    <div ng-show="showExtended" class="tile" ng-repeat="item in attendees track by item._id">
                         <div class="title font-6"> {{item.firstName}} {{item.lastName}} </div>
                         <hr>
                         <div class="description padded font-1"> Email: {{item.email}}  </div>
@@ -64,7 +70,7 @@
                                 </li>
                             </ul>
                         </div>
-
+    
                         <div class="description padded font-1" ng-show="showExtended"> 
                             Prizes Redeemed: 
                             <ul class="padded">
@@ -73,7 +79,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </a>
+                    </div>
                 </div>
     
                 <!-- IF Creating a new Demo -->
@@ -133,21 +139,21 @@
     
                 <!-- IF Error messages -->
                 <div class="row errorMessageContainer" ng-show="errorMessage.show">
-                    <a ng-click="showDemoStations = false; createDemo = false; errorMessage.show = false;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
+                    <div ng-click="showDemoStations = false; createDemo = false; errorMessage.show = false;" class="tile">
                         <div class="title font-6"> {{errorMessage.title}}  </div>
                         <hr>
                         <ul class="description padded font-1">
                             <li ng-repeat="row in errorMessage.description">{{row}}</li>
                         </ul>
-                    </a>
+                    </div>
                 </div>
 
 
 
                 <!-- ...................................... Testing Loggin Demo for Attendee ...................................... -->
-                <form action="/api/attendee/badgeId/123546789/demo/5a958a92e1a3a2cbd9ebea26" method="POST">
+                <!-- <form action="/api/attendee/badgeId/123546789/demo/5a958a5fe1a3a2cbd9ebea24" method="POST">
                     <input type="submit" value="Post Demo for Attendee" />
-                </form>
+                </form> -->
                 <!-- .............................................................................................................. -->
 
                 <!-- ............................................ Testing Redeeming Prize ............................................ -->

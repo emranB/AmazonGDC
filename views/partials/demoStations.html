@@ -23,16 +23,41 @@
                 
             <!-- IF Showing Demos Stations -->
             <div class="row tile-container demos-container" id="demos-container" ng-show="demoStations.length && showDemoStations">
-                <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="demoStation({demoStationId: '{{item._id}}' })" ng-repeat="item in demoStations">
+                <a class="tile" ng-hide="showExtended" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="demoStation({demoStationId: '{{item._id}}' })" ng-repeat="item in demoStations">
                     <div class="description padded font-1"> Affiliated Demo:  </div>
                     <div class="title font-6"> {{item.demo.title}}  </div>
                     <hr>
-                    <div class="team padded font-1" ng-show="showExtended"> Demo Station ID: {{item._id}}  </div>
-                    <div class="team padded font-1" ng-show="showExtended"> Demo ID: {{item.demo._id}}  </div>
-                    <div class="team padded font-1"> Demo Team: {{item.demo.team}}  </div>
-                    <div class="category padded font-1"> Demo Category: {{item.demo.team}} </div>
                     <div class="description padded font-1"> {{item.demo.description}} </div>
                 </a>
+                <div class="tile" ng-show="showExtended" ng-repeat="item in demoStations"> 
+                    <div class="description padded font-1"> Affiliated Demo: </div>
+                    <div class="title font-6"> {{item.demo.title}}  </div>
+                    <hr>
+                    <div class="row description padded font-1">
+                        <div class="col-2"> Demo Station ID: </div>
+                        <div class="col-10"> {{item._id}} </div>
+                    </div>
+                    <div class="row description padded font-1">
+                        <div class="col-2"> Demo ID: </div>
+                        <div class="col-10"> {{item.demo._id}} </div>
+                    </div>
+                    <div class="row description padded font-1">
+                        <div class="col-2"> Demo Team: </div>
+                        <div class="col-10"> {{item.demo.team}} </div>
+                    </div>
+                    <div class="row description padded font-1">
+                        <div class="col-2"> Demo Category: </div>
+                        <div class="col-10"> {{item.demo.team}} </div>
+                    </div>
+                    <div class="row description padded font-1">
+                        <div class="col-2"> Demo Description </div>
+                        <div class="col-10"> {{item.demo.description}} </div>
+                    </div>
+                    <div class="row description padded font-1">
+                        <div class="col-2"> Require Checkout </div>
+                        <div class="col-10"> {{item.demo.requireCheckout}} </div>
+                    </div>
+                </div>
             </div>
 
             <!-- IF Creating a new Demo -->

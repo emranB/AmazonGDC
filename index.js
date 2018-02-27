@@ -31,6 +31,6 @@ app.all('/*', function (req, res) {
     res.sendFile('views/index.html', {root: __dirname});
 });
 
-app.listen(2000);
+app.listen(2000, "0.0.0.0");
 
 

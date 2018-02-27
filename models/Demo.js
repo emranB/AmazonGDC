@@ -21,7 +21,8 @@ var DemoSchema = new Schema({
     title: String,
     team: String,
     category: String,
-    description: String
+    description: String,
+    requireCheckout: String
 }, 
 {
     collection: 'demo',
