@@ -15,17 +15,10 @@ var UserSchema = new Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
         index: true,
-        required: true,
-        auto: true,
+        auto: true
     },
-    username: {
-        type: String,
-        requried: true
-    },
-    password: {
-        type: String,
-        required: true
-    }
+    username: String,
+    password: String
 }, 
 {
     collection: 'user',

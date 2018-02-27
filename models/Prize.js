@@ -18,18 +18,9 @@ var PrizeSchema = new Schema({
         required: true,
         auto: true,
     },
-    title: {
-        type: String,
-        required: true
-    },
-    points: {
-        type: Number,
-        required: true
-    },
-    imageKey:  {
-        type: String,
-        required: true
-    },
+    title: String,
+    points: Number,
+    imageKey: String,
     inventory: Object,
     redemptions: Object
 },

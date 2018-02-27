@@ -10,12 +10,12 @@
             
         <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 full-screen-width-size upper segment text-centered box-shadowed">
             
-            <h1 class="font-4 white text-shadowed"> {{header.title}} </h1>
+            <h1 class="font-4 dark-orange text-shadowed"> {{header.title}} </h1>
             <p class="font-5"> {{header.subTitle}} <hr></p>
 
             <!-- Page Options -->
             <div class="row tile-container demos-container" id="demos-container" ng-show="!showDemos && !createDemo">
-                <a class="col-lg-3 col-md-3 col-sm-12 col-xs-12 tile" ng-click="(option.action)()" ng-repeat="option in pageOptions">
+                <a class="tile" ng-click="(option.action)()" ng-repeat="option in pageOptions">
                     <div class="title font-6"> {{option.title}}  </div>
                     <hr>
                     <div class="description padded font-1"> {{option.description}} </div>
@@ -24,14 +24,37 @@
                 
             <!-- IF Showing Demos -->
             <div class="row tile-container demos-container" id="demos-container" ng-show="demos.length && showDemos">
-                <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="demo({demoId: '{{item._id}}' })" ng-repeat="item in demos">
+                <!-- IF showing list of ALL DEMOS -->
+                <a class="tile" ui-sref="demo({demoId: '{{item._id}}' })" ng-repeat="item in demos" ng-hide="showExtended">
                     <div class="title font-6"> {{item.title}}  </div>
                     <hr>
-                    <div class="team padded font-1" ng-show="showExtended"> Demo ID: {{item._id}}  </div>
-                    <div class="team padded font-1"> Team Name: {{item.team}}  </div>
-                    <div class="category padded font-1"> Category: {{item.category}} </div>
                     <div class="description padded font-1"> {{item.description}} </div>
                 </a>
+                <!-- IF showing a SINGLE DEMO -->
+                <div class="tile col-12" ng-repeat="item in demos" ng-show="showExtended">
+                    <div class="title font-6"> {{item.title}}  </div>
+                    <hr>
+                    <div class="description padded font-1 row"> 
+                        <div class="col-2"> Description: </div>
+                        <div class="col-10"> {{item.description}} </div>
+                    </div>
+                    <div class="description padded font-1 row">
+                        <div class="col-2"> Demo ID: </div>
+                        <div class="col-10"> {{item._id}} </div>
+                    </div>
+                    <div class="description padded font-1 row">
+                        <div class="col-2"> Team Name: </div>
+                        <div class="col-10"> {{item.team}} </div>
+                    </div>
+                    <div class="description padded font-1 row">
+                        <div class="col-2"> Category: </div>
+                        <div class="col-10"> {{item.category}} </div>
+                    </div>
+                    <div class="description padded font-1 row">
+                        <div class="col-2"> Require Checking out: </div>
+                        <div class="col-10"> {{item.requireCheckout ? "Yes" : "No"}} </div>
+                    </div>
+                </div>
             </div>
 
             <!-- IF Creating a new Demo -->
@@ -40,25 +63,34 @@
                     <div class="row field">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Title:</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
-                            <input type="text" name="title" placeholder="title" value="" />
+                            <input type="text" name="title" placeholder="title" value="DemoX" />
                         </div>
                     </div>
                     <div class="row field">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Team Name:</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
-                            <input type="text" name="team" placeholder="team" value="" />
+                            <input type="text" name="team" placeholder="team" value="TeamX" />
                         </div>
                     </div>
                     <div class="row field">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Category:</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
-                            <input type="text" name="category" placeholder="category" value="" />
+                            <input type="text" name="category" placeholder="category" value="CategoryX" />
                         </div>
                     </div>
                     <div class="row field">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Description:</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
-                            <textarea name="description" placeholder="describe the demo"></textarea>
+                            <textarea name="description" placeholder="describe the demo">DescriptionX</textarea>
+                        </div>
+                    </div>
+                    <div class="row field">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Require Check Out:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
+                            <select name="requireCheckout">
+                                <option value="false" selected>No</option>
+                                <option value="true">Yes</option>
+                            </select>
                         </div>
                     </div>
                     <br>
@@ -72,12 +104,14 @@
 
             <!-- IF Error messages -->
             <div class="row errorMessageContainer" ng-show="errorMessage.show">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
-                    <div class="title font-6"> {{errorMessage.title}}  </div>
-                    <hr>
-                    <ul class="description padded font-1">
-                        <li ng-repeat="row in errorMessage.description">{{row}}</li>
-                    </ul>
+                <div class="col-12">
+                    <a ng-click="showDemos = false; createDemo = false; errorMessage.show = false;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
+                        <div class="title font-6"> {{errorMessage.title}}  </div>
+                        <hr>
+                        <ul class="description padded font-1">
+                            <li ng-repeat="row in errorMessage.description">{{row}}</li>
+                        </ul>
+                    </a>
                 </div>
             </div>
                 

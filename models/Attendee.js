@@ -260,11 +260,10 @@ var postAttendeeDemo = function (data) {
             .catch(function (error) {
                 throw error;
             });
+        } else {
+            console.log("Demo has already been viewed by Attendee");
+            return false;
         }
-        // else {
-        //     console.log("Demo has already been viewed by Attendee");
-        //     return false;
-        // }
     };
 
     /* Chain promises together in final function calls */
