@@ -241,6 +241,12 @@ var postAttendeeDemo = function (data) {
     /* Update Demo views by Attendee */
     var updateAttendeeDemoViews = function (viewedDemoIds) {
         var viewingDemoId = demo._id.toString();
+
+
+        console.log(demo);
+        throw 'stop333';
+
+
         if (viewedDemoIds.indexOf(viewingDemoId) == -1) {
             return AttendeeModel.update(
                 {badgeNumber: badgeId},
@@ -260,10 +266,11 @@ var postAttendeeDemo = function (data) {
             .catch(function (error) {
                 throw error;
             });
-        } else {
-            console.log("Demo has already been viewed by Attendee");
-            return false;
         }
+        // else {
+        //     console.log("Demo has already been viewed by Attendee");
+        //     return false;
+        // }
     };
 
     /* Chain promises together in final function calls */

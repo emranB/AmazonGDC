@@ -105,7 +105,13 @@
             var activationCode = "4186598";
             var authKey = "CurrentStudios_1";
             var deviceIdentifier = "Test";
-            var NdefRec = "OTk5MzMeMTc0MR9Nci4fZmlyc3RuYW1lIDkzNB9sYXN0bmFtZSA5MzQfbWlkZGxlbmFtZSA5MzQfU3IuH+fW8wJ8xWcr7HzUSE4gM+GtKRoJ7zce6UTeNEXozPsS1gJmbRlSluha5fHAGrkIY/5xnDjqGnwrDEDdVW7mrYmeLmLn8D8PXV7Ke9Sp6LqTivHl+TlEWeTD+5kTT40TztgCKeQhGJ9PXRaS2SslZDNi01tlxwXrTPllvZG2Bp2dDYm46Tmbhs3d/0xDHuJVP+nZAM5Craf4kEAODtANWHrPaQOdMV9dhIKItpQtZVjNNUY4hjtpa3HJ1TBBvRaMh6nPjbBqBtXmOqQ7mNjF6Ci0viPa1GXydrlYrAgWMtvcp83MV+i6WZzTgRExdJlqVDiqE04EhlJ6UkNRrsk+MG6EUB3ZFWGvZA==";
+            var NdefRec = "MTY4Mh4xNzQxH01zLh9MZWUfSHVsbB9XHx/iNVJ8QJR5o5pmh4yy7CsHNwyHH09G9AzSrGIBVDZyj5DTaBcmwtiXiQZLZMMP4W5MrYGiBSa5imxKKrxYPAlbr99FO+w2hBrCr/FM1TLgZGpPYZpWio3z8DK+rtq4tjMxJwyT4xYXUsmBlMtOUDazPYeteTknVzy5kFkDurfpWgJv+0pnNED7p0iZsZNDOroGbEeGlqvSaH7KM8n+zkKnPnPq";
+            /**************************************/
+            /*************** Test Params ***************/
+            // var activationCode = "156D3AE";
+            // var authKey = "ITNTest";
+            // var deviceIdentifier = "TestDevice";
+            // var NdefRec = "MjA5NTA3HjE1OTcfH0d1aWRvH0dyaWVzZR8fH8YaabeGMB+e3IRpGv+RzbXat 14Jvht\/66mdSFt2xOkcBQOiJ9jTtaGw+mxcicDWNdtIAwgXBq\/W9\/rOOFIQNz2SjHxioUhjyNFvrgb9lstf 4DhTxcNw8E8Cv2D2FPQMIvxxOGv\/tEYN5UUiIPmWtDHFCi+PxTcrqUq9hTyxkzyI07FPEy8KiM5z2HQdu n+MTW+7MpNPveHl66HAlt1QJwXM3EuF4qA+Tt7z1Jmm6k7n";
             /**************************************/
 
             var params = {
@@ -120,6 +126,7 @@
                     console.log(response);
                 });
         };
+        // $scope.registerNewAttendee();
 
         
         /* Logout User */

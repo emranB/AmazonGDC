@@ -23,25 +23,17 @@
                     
                 <!-- IF Showing Demos Stations -->
                 <div class="row tile-container demos-container" id="demos-container" ng-show="attendees.length && showAttendees">
-                    <a class="tile" ng-hide="showExtended" ui-sref="attendee({attendeeId: '{{item._id}}' })" ng-repeat="item in attendees track by item._id">
+                    <a class="tile" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'"  ui-sref="attendee({attendeeId: '{{item._id}}' })" ng-repeat="item in attendees track by item._id">
                         <div class="title font-6"> {{item.firstName}} {{item.lastName}} </div>
                         <hr>
                         <div class="description padded font-1"> Email: {{item.email}}  </div>
                         <div class="description padded font-1"> Phone: {{item.phone}} </div>
-                    </a>
-
-
-                    <div class="tile" ng-class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  ng-repeat="item in attendees track by item._id" ng-show="showExtended">
-                        <div class="title font-6"> {{item.firstName}} {{item.lastName}} </div>
-                        <hr>
-                        <div class="category padded font-1"> Email: {{item.email}}  </div>
-                        <div class="category padded font-1"> Phone: {{item.phone}} </div>
-                        <div class="category padded font-1"> Unique ID: {{item._id}} </div>
-                        <div class="category padded font-1"> Badge Number: {{item.badgeNumber}} </div>
-                        <div class="category padded font-1"> Points Available: {{item.pointsCount}} </div>
-                        <div class="category padded font-1"> Points Accumulated: {{item.pointsAccumulated}} </div>
-                        <hr>
-                        <div class="description padded font-1"> 
+                        <div class="category padded font-1" ng-show="showExtended"> Unique ID: {{item._id}} </div>
+                        <div class="category padded font-1" ng-show="showExtended"> Badge Number: {{item.badgeNumber}} </div>
+                        <div class="category padded font-1" ng-show="showExtended"> Points Available: {{item.pointsCount}} </div>
+                        <div class="category padded font-1" ng-show="showExtended"> Points Accumulated: {{item.pointsAccumulated}} </div>
+                        <hr ng-show="showExtended">
+                        <div class="description padded font-1" ng-show="showExtended"> 
                             Registration Status:
                             <ul class="padded">
                                 <li>Scanned: {{item.registrationStatus.scanned}}</li>
@@ -55,7 +47,7 @@
                             </ul>
                             <hr>
                         </div>
-                        <div class="description padded font-1"> 
+                        <div class="description padded font-1" ng-show="showExtended"> 
                             Questionnaire: 
                             <ul class="padded">
                                 <li ng-repeat="question in item.questionnaire">
@@ -64,7 +56,7 @@
                             </ul>
                             <hr>
                         </div>
-                        <div class="description padded font-1"> 
+                        <div class="description padded font-1" ng-show="showExtended"> 
                             Demos Viewed: 
                             <ul class="padded">
                                 <li ng-repeat="demo in item.demos">
@@ -72,8 +64,8 @@
                                 </li>
                             </ul>
                         </div>
-    
-                        <div class="description padded font-1"> 
+
+                        <div class="description padded font-1" ng-show="showExtended"> 
                             Prizes Redeemed: 
                             <ul class="padded">
                                 <li ng-repeat="prize in item.redemptions">
@@ -81,8 +73,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
-
+                    </a>
                 </div>
     
                 <!-- IF Creating a new Demo -->
@@ -142,34 +133,29 @@
     
                 <!-- IF Error messages -->
                 <div class="row errorMessageContainer" ng-show="errorMessage.show">
-                    <div class="col-12">
-                        <a ng-click="showAttendees = false; createAttendee = false; errorMessage.show = false;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
-                            <div class="title font-6"> {{errorMessage.title}}  </div>
-                            <hr>
-                            <ul class="description padded font-1">
-                                <li ng-repeat="row in errorMessage.description">{{row}}</li>
-                            </ul>
-                        </a>
-                    </div>
+                    <a ng-click="showDemoStations = false; createDemo = false; errorMessage.show = false;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
+                        <div class="title font-6"> {{errorMessage.title}}  </div>
+                        <hr>
+                        <ul class="description padded font-1">
+                            <li ng-repeat="row in errorMessage.description">{{row}}</li>
+                        </ul>
+                    </a>
                 </div>
 
 
 
                 <!-- ...................................... Testing Loggin Demo for Attendee ...................................... -->
-                <!-- <form action="/api/attendee/badgeId/test_badgeNumber/demo/5a905621d62f7c45b5aece1f" method="POST">
+                <form action="/api/attendee/badgeId/123546789/demo/5a958a92e1a3a2cbd9ebea26" method="POST">
                     <input type="submit" value="Post Demo for Attendee" />
-                </form> -->
+                </form>
                 <!-- .............................................................................................................. -->
 
                 <!-- ............................................ Testing Redeeming Prize ............................................ -->
-                <!-- <form action="/api/attendee/badgeId/test_badgeNumber/redeemPrize/5a9478216ac993ac032408f7" method="POST">
+                <!-- <form action="/api/attendee/badgeId/test_badgeNumber/redeemPrize/5a944edbb322b292ae169d8f" method="POST">
                     <input type="submit" value="submit">
                 </form> -->
                 <!-- ................................................................................................................. -->
-
-                <!-- ............................................ Testing RFID Authorization ............................................ -->
-                <!-- <button ng-click="registerNewAttendee()"> Send Request to ITN API!</button> -->
-                <!-- .................................................................................................................... -->
+                    
 
                 
             </div>

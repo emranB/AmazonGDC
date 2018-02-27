@@ -18,7 +18,10 @@ var DemoStationSchema = new Schema({
         required: true,
         auto: true,
     },
-    demo: Object
+    demo: {
+        type: Object,
+        required: true
+    }
 },
 {
     collection: 'demoStation',

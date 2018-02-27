@@ -21,11 +21,7 @@ var DemoSchema = new Schema({
     title: String,
     team: String,
     category: String,
-    description: String,
-    requireCheckout: {
-        type: Boolean,
-        default: false
-    }
+    description: String
 }, 
 {
     collection: 'demo',
@@ -70,7 +66,7 @@ var getDemoByTitle = function (name) {
 var postDemo = function (data) {
     data = JSON.parse(data);
     data.id = id;
-    data.requireCheckout = data.requireCheckout == 'true' ? true : false;
+    /* validateData(data) */
     var demoData = new DemoModel(data);
 
     return demoData.save()

@@ -226,10 +226,10 @@ var saveAttendeeDemo = function (req, res) {
         .then(postAttendeeDemo)
         .then(function (data) {
             /* If demo has already been viewed by user, send a conflict message back */
-            if (data == undefined) {
-                data = "Demo has already been viewed by Attendee";
-            }
-            console.log(data);
+            // if (data == undefined) {
+            //     data = "Demo has already been viewed by Attendee";
+            // }
+            // console.log(data);
             res.redirect("/attendees");
         })
         .catch(function (error) {

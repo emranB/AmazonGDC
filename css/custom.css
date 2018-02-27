@@ -16,20 +16,16 @@ body {
     60% { background-color: #3498db; }
     80% { background-color: #9b59b6; }
     100% { background-color: #e74c3c; } */
-}
+  }
   
-@keyframes bg-color {
-    0% { background-color: #e74c3c; }
+  @keyframes bg-color {
+    /* 0% { background-color: #e74c3c; }
     20% { background-color: #f1c40f; }
     40% { background-color: #1abc9c; }
     60% { background-color: #3498db; }
     80% { background-color: #9b59b6; }
-    100% { background-color: #e74c3c; }
-}
-  
-.ng-hide.ng-hide-animate{
-    display: none !important;
-}
+    100% { background-color: #e74c3c; } */
+  }
   
 /****************** Fonts *******************/
 .font-1 {
@@ -145,10 +141,6 @@ body {
 /********************************************************/
 
 /****************** Grid *******************/
-.right-aligned { text-align: right; }
-.left-aligned { text-align: left; }
-.center-aligned { text-align: center; }
-
 .outer-container {
     width: 100vw;
     height: 100vh;
@@ -158,13 +150,13 @@ body {
 }
 .body-top-segment {
     border: 0 solid #ff9f1a;
-    height: 95vh;
+    min-height: 90vh;
     overflow: auto;
     width: 100vw;
     background: #ffaf40;
 }
 .body-bottom-segment {
-    height: 5vh;
+    height: 10vh;
     width: 100vw;
     background: black;
 }
@@ -199,26 +191,24 @@ body {
 
 .form-container {
     display: inline-block;
-    text-align: right;
+    text-align: center;
     width: 40%;
     padding: 50px 0;
 }
 .field {
     padding: 5px;
 }
-.field input[type=text], .field input[type=password], .field input[type=number],  .field textarea,  .field select {
+.field input[type=text], .field input[type=password], .field input[type=number],  .field textarea {
     border: 2px solid white;
     border-radius: 10px;
     background: transparent;
     color: black;
     padding: 0 10px;
-    width: 100%;
 }
 .field input[type=text]:focus, .field input[type=password]:focus, .field input[type=number]:focus, .field textarea:focus {
     background: white;
     color: black;
 }
-
 
 .form-submit, .ghost-button-1 {
     border: 2px solid white;
@@ -237,14 +227,12 @@ body {
 
 .card {
     background: transparent;
+    /* background: #ff9f1a; */
     border: 0 solid black;
     border-radius: 0;
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    font-size: 1em;
-    padding: 1%;
+    font-size: 1.5em;
+    padding: 2%;
     color: #ff9f1a;
     text-shadow: 3px 3px 3px black;
     -webkit-transition: all 0.2s ease-in-out;
@@ -275,19 +263,18 @@ body {
 .tile-container {
     display: inline-block;
     width: 100%;
-    max-height: 80vh;
+    max-height: 58vh;
     text-align: left;
-    padding: 2.5% 0;
-    display: inline-block;
-    overflow: auto;
+    padding: 50px 0;
 }
-a.tile {
-    margin: 1%;
+.tile {
+    margin: 20px;
     padding: 15px;    
     display: inline-block;
     vertical-align: middle;
     background: #ff9f1a;
     /* height: auto; */
+    border:  0 solid white;
     box-shadow: 3px 3px 3px black;
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
@@ -295,27 +282,10 @@ a.tile {
     -o-transition: all 0.2s ease;
     overflow: auto;
     max-height: 58vh;
-    min-width: 31.33%;
+    min-width: 400px;
     text-decoration: none;
 }
-div.tile {
-    margin: 1%;
-    padding: 2%;    
-    display: block;
-    vertical-align: middle;
-    background: #ff9f1a;
-    /* height: auto; */
-    box-shadow: 3px 3px 3px black;
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    overflow: auto;
-    max-height: 66vh;
-    width: 98%;
-    text-decoration: none;
-}
-a.tile:hover {
+.tile:hover {
     text-decoration: none;
     background: #ff3838;
     -webkit-transition: all 0.2s ease;
@@ -343,15 +313,8 @@ a.tile:hover {
     font-size: 0.8em;
 }
 
-.errorMessageContainer a {
-    text-align: left;
-    background: #ff3838 !important;
-    padding: 2.5%;
-    width: 95%;
-    
-}
-.errorMessageContainer:hover a {
-    background: #ff3838 !important;
+.errorMessageContainer {
+
 }
 
 /************ Demos **************/
