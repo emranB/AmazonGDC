@@ -9,7 +9,7 @@
     <div class="row body-top-segment">
         <div class="col-lg-12 col-mg-12 col-sm-12 col-xs-12 full-screen-width-size upper segment text-centered box-shadowed">
             
-            <h1 class="font-4 white text-shadowed"> {{header.title}} </h1>
+            <h1 class="font-4 dark-orange text-shadowed"> {{header.title}} </h1>
             <p class="font-5"> {{header.subTitle}} <hr></p>
 
             <!-- Page Options -->
@@ -82,13 +82,13 @@
 
             <!-- IF Error messages -->
             <div class="row errorMessageContainer" ng-show="errorMessage.show">
-                <a ng-click="showDemoStations = false; createDemo = false; errorMessage.show = false;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tile">
+                <div ng-click="showDemoStations = false; createDemoStation = false; errorMessage.show = false;" class="tile">
                     <div class="title font-6"> {{errorMessage.title}}  </div>
                     <hr>
                     <ul class="description padded font-1">
                         <li ng-repeat="row in errorMessage.description">{{row}}</li>
                     </ul>
-                </a>
+                </div>
             </div>
                 
         </div>

@@ -121,12 +121,21 @@ var postAttendee = function (data) {
 
 
 var postAttendeeRegistrationStatus = function (attendeeObj) {
+
+    console.log("------------------------------------------------------------------------------")
+    console.log("------------------------------------------------------------------------------")
+    console.log("In Attendee.js postAttendeeRegistrationStatus");
+    console.log(attendeeObj);
+    console.log("------------------------------------------------------------------------------")
+    console.log("------------------------------------------------------------------------------")
+
+
     /* Retrieve and appropriately format data */
     var parseAttendeeDetails = function () {
         return getAttendeeByBadgeId(attendeeObj.badgeNumber)
             .then(function (response) {
                 /* Extracting currently saved data from db */
-                var oldDataStatus = response.registrationStatus;oldDataStatus_vals.length;
+                var oldDataStatus = response.registrationStatus;
                 var oldDataStatus_keys = Object.keys(oldDataStatus);
                 var oldDataStatus_vals = Object.keys(oldDataStatus).map(function (key) {
                     return oldDataStatus[key];
@@ -161,7 +170,7 @@ var postAttendeeRegistrationStatus = function (attendeeObj) {
                         var valAffected = newDataStatus_vals[i];
 
                         var statusKey = (oldDataStatus_keys[i].indexOf("question") !== -1) ? oldDataStatus_keys[i] : keyAffected;
-                        var statusVal = (valAffected.trim()) ? "true" : "false";
+                        var statusVal = (valAffected) ? "true" : "false";
                         newStatusObj[statusKey] = statusVal;
                     }
                 }
@@ -203,6 +212,11 @@ var postAttendeeRegistrationStatus = function (attendeeObj) {
             {upsert: false}
         )
         .then(function (response) {
+            // console.log("------------------------------------------------------------------------");
+            // console.log("In Attendee.js postAttendeeRegistrationStatus");
+            // console.log(response);
+            // console.log("------------------------------------------------------------------------");
+            // console.log("------------------------------------------------------------------------");
             return response;
         })
         .catch(function (error) {
@@ -228,10 +242,7 @@ var postAttendeeDemo = function (data) {
     var getAttendeeDemoViews = function () {
         return getAttendeeByBadgeId(badgeId, "demos")
             .then(function (demos) {
-                var demoIds = demos.map(function (demo) {
-                    return demo._id.toString();
-                });
-                return demoIds;
+                return demos;
             })
             .catch(function (error) {
                 throw error;
@@ -239,15 +250,125 @@ var postAttendeeDemo = function (data) {
     };
 
     /* Update Demo views by Attendee */
-    var updateAttendeeDemoViews = function (viewedDemoIds) {
+    var updateAttendeeDemoViews = function (viewedDemos) {
+        var viewedDemoIds = viewedDemos.map(function (viewedDemo) {
+            return viewedDemo._id.toString();
+        });
         var viewingDemoId = demo._id.toString();
 
+        demo = JSON.parse(JSON.stringify(demo));
 
-        console.log(demo);
-        throw 'stop333';
+        /********************************************************************************************************************** 
+         ** - Check if demo has "requireCheckout"
+         **         IF demo has "requireCheckout"
+         **             - Check if demo doesn't exist in Attendee Object
+         **                 IF demo doesn't exist in Attendee Object
+         **                     - Initiate demo object with new "checkedIn='true'" and "checkedOut='false'" fields
+         **                     - Push demo into Attendee object
+         **                       (DO NOT increment points here)
+         **                 ELSE IF demo exists in Attendee Object
+         **                     - Check if this Demo ID matches the ID of the last demo in the Attendee object
+         **                         IF Demo IDs match
+         **                             - Initiate current demo object with "checkedIn='true'" and "checkedOut='true'"
+         **                             - Check if the last Demo in the Attendee object has "checkedOut='true'"
+         **                                 IF the last Attendee object demo has "checkedOut='true'"
+         **                                     - Push demo into Attendee object
+         **                                 ELSE IF the last Attendee object demo has "checkedOut='false'"
+         **                                     - Increment Attendee 'pointsCount' and 'pointsAccumulated'
+         **                                     - Push demo into Attendee object
+         **                         ELSE IF Demo IDs don't match 
+         **                             - Initiate current demo object with "checkedIn='true'" and "checkedOut='false'"
+         **                             - Push demo into Attendee object
+         **********************************************************************************************************************/
+        if (demo.requireCheckout == "true") {
+            if (viewedDemoIds.indexOf(viewingDemoId) == -1) {   
+                demo.checkedIn = "true";
+                demo.checkedOut = "false";                     
 
+                return AttendeeModel.update(
+                    {badgeNumber: badgeId},
+                    {
+                        $push: {
+                            demos: demo
+                        }
+                    }
+                )
+                .then(function (response) {
+                    return response;
+                })
+                .catch(function (error) {
+                    throw error;
+                });
+            } else {                                                                
+                var lastViewedDemo = viewedDemos[viewedDemos.length - 1];
+                var lastViewedDemoId = viewedDemoIds[viewedDemoIds.length - 1];     
+                
+                if (viewingDemoId == lastViewedDemoId) {  
+                    demo.checkedIn = "true";
+                    demo.checkedOut = "true";                                      
 
-        if (viewedDemoIds.indexOf(viewingDemoId) == -1) {
+                    if (lastViewedDemo.checkedOut == "true") {                    
+                        return AttendeeModel.update(                                
+                            {badgeNumber: badgeId},
+                            {
+                                $push: {
+                                    demos: demo
+                                }
+                            }
+                        )
+                        .then(function (response) {
+                            return response;
+                        })
+                        .catch(function (error) {
+                            throw error;
+                        });
+                    } else {
+                        return AttendeeModel.update(
+                            {badgeNumber: badgeId},
+                            {
+                                $push: {
+                                    demos: demo
+                                },
+                                $inc: {
+                                    pointsCount: DEMO_POINTS,
+                                    pointsAccumulated: DEMO_POINTS
+                                }
+                            }
+                        )
+                        .then(function (response) {
+                            return response;
+                        })
+                        .catch(function (error) {
+                            throw error;
+                        });
+                    }
+                } else {
+                    demo.checkedIn = "true";
+                    demo.checkedOut = "false";  
+
+                    return AttendeeModel.update(
+                        {badgeNumber: badgeId},
+                        {
+                            $push: {
+                                demos: demo
+                            }
+                        }
+                    )
+                    .then(function (response) {
+                        return response;
+                    })
+                    .catch(function (error) {
+                        throw error;
+                    });
+                }
+            }
+        }
+        /************************************************************************** 
+         ** ELSE IF does not have "requireCheckout"
+         **     - Push Demo into Attendee object
+         **     - Increment Attendee's 'pointsCount' and 'pointsAccumulated'
+         **************************************************************************/
+        else {
             return AttendeeModel.update(
                 {badgeNumber: badgeId},
                 {
@@ -267,10 +388,6 @@ var postAttendeeDemo = function (data) {
                 throw error;
             });
         }
-        // else {
-        //     console.log("Demo has already been viewed by Attendee");
-        //     return false;
-        // }
     };
 
     /* Chain promises together in final function calls */

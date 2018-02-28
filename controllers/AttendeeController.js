@@ -99,25 +99,9 @@
         loadPage();
     
 
-        /* Register new Attendee */
-        $scope.registerNewAttendee = function () {
-            /*************** Params ***************/
-            var activationCode = "4186598";
-            var authKey = "CurrentStudios_1";
-            var deviceIdentifier = "Test";
-            var NdefRec = "MTY4Mh4xNzQxH01zLh9MZWUfSHVsbB9XHx/iNVJ8QJR5o5pmh4yy7CsHNwyHH09G9AzSrGIBVDZyj5DTaBcmwtiXiQZLZMMP4W5MrYGiBSa5imxKKrxYPAlbr99FO+w2hBrCr/FM1TLgZGpPYZpWio3z8DK+rtq4tjMxJwyT4xYXUsmBlMtOUDazPYeteTknVzy5kFkDurfpWgJv+0pnNED7p0iZsZNDOroGbEeGlqvSaH7KM8n+zkKnPnPq";
-            /**************************************/
-            /*************** Test Params ***************/
-            // var activationCode = "156D3AE";
-            // var authKey = "ITNTest";
-            // var deviceIdentifier = "TestDevice";
-            // var NdefRec = "MjA5NTA3HjE1OTcfH0d1aWRvH0dyaWVzZR8fH8YaabeGMB+e3IRpGv+RzbXat 14Jvht\/66mdSFt2xOkcBQOiJ9jTtaGw+mxcicDWNdtIAwgXBq\/W9\/rOOFIQNz2SjHxioUhjyNFvrgb9lstf 4DhTxcNw8E8Cv2D2FPQMIvxxOGv\/tEYN5UUiIPmWtDHFCi+PxTcrqUq9hTyxkzyI07FPEy8KiM5z2HQdu n+MTW+7MpNPveHl66HAlt1QJwXM3EuF4qA+Tt7z1Jmm6k7n";
-            /**************************************/
-
+        /* Lookup Attendee RFID */
+        $scope.lookupRfid = function (NdefRec) {
             var params = {
-                ActivationCode: activationCode,
-                AuthKey: authKey,
-                DeviceIdentifier: deviceIdentifier,
                 NdefRecord: NdefRec
             };
 

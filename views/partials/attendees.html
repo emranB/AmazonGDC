@@ -32,50 +32,96 @@
                     <div ng-show="showExtended" class="tile" ng-repeat="item in attendees track by item._id">
                         <div class="title font-6"> {{item.firstName}} {{item.lastName}} </div>
                         <hr>
-                        <div class="description padded font-1"> Email: {{item.email}}  </div>
-                        <div class="description padded font-1"> Phone: {{item.phone}} </div>
-                        <div class="category padded font-1" ng-show="showExtended"> Unique ID: {{item._id}} </div>
-                        <div class="category padded font-1" ng-show="showExtended"> Badge Number: {{item.badgeNumber}} </div>
-                        <div class="category padded font-1" ng-show="showExtended"> Points Available: {{item.pointsCount}} </div>
-                        <div class="category padded font-1" ng-show="showExtended"> Points Accumulated: {{item.pointsAccumulated}} </div>
-                        <hr ng-show="showExtended">
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Email: </div>
+                            <div class="col-10"> {{item.email}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Phone: </div>
+                            <div class="col-10"> {{item.phone}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Unique ID: </div>
+                            <div class="col-10"> {{item._id}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Badge Number: </div>
+                            <div class="col-10"> {{item.badgeNumber}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Points Available: </div>
+                            <div class="col-10"> {{item.pointsCount}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Points Accumulated: </div>
+                            <div class="col-10"> {{item.pointsAccumulated}} </div>
+                        </div>
+                        <hr>
                         <div class="description padded font-1" ng-show="showExtended"> 
                             Registration Status:
-                            <ul class="padded">
-                                <li>Scanned: {{item.registrationStatus.scanned}}</li>
-                                <li>Terms: {{item.registrationStatus.terms}}</li>
-                                <li>Question 0: {{item.registrationStatus.question_0}}</li>
-                                <li>Question 1: {{item.registrationStatus.question_1}}</li>
-                                <li>Question 2: {{item.registrationStatus.question_2}}</li>
-                                <li>Question 3: {{item.registrationStatus.question_3}}</li>
-                                <li>Question 4: {{item.registrationStatus.question_4}}</li>
-                                <li>Completed: {{item.registrationStatus.complete}}</li>
+                            <ul>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Scanned: </div>
+                                    <div class="col-10"> {{item.registrationStatus.scanned}} </div>
+                                </li>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Terms: </div>
+                                    <div class="col-10"> {{item.registrationStatus.terms}} </div>
+                                </li>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Question 0: </div>
+                                    <div class="col-10"> {{item.registrationStatus.question_0}} </div>
+                                </li>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Question 1: </div>
+                                    <div class="col-10"> {{item.registrationStatus.question_1}} </div>
+                                </li>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Question 2: </div>
+                                    <div class="col-10"> {{item.registrationStatus.question_2}} </div>
+                                </li>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Question 3: </div>
+                                    <div class="col-10"> {{item.registrationStatus.question_3}} </div>
+                                </li>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Question 4: </div>
+                                    <div class="col-10"> {{item.registrationStatus.question_4}} </div>
+                                </li>
+                                <li class="row description padded font-1">
+                                    <div class="col-2"> Completed: </div>
+                                    <div class="col-10"> {{item.registrationStatus.complete}} </div>
+                                </li>
                             </ul>
-                            <hr>
                         </div>
+                        <hr>
                         <div class="description padded font-1" ng-show="showExtended"> 
                             Questionnaire: 
-                            <ul class="padded">
-                                <li ng-repeat="question in item.questionnaire">
-                                    {{question.question}} <br> Answer: {{question.title}}
+                            <ul>
+                                <li class="row description padded font-1" ng-repeat="question in item.questionnaire">
+                                    <div class="col-2"> Question: {{question.question}} </div>
+                                    <div class="col-10"> Answer: {{question.answer}} </div>
                                 </li>
                             </ul>
-                            <hr>
                         </div>
+                        <hr>
                         <div class="description padded font-1" ng-show="showExtended"> 
                             Demos Viewed: 
-                            <ul class="padded">
-                                <li ng-repeat="demo in item.demos">
-                                    {{demo._id}} - {{demo.title}}
+                            <ul>
+                                <li class="row description padded font-1" ng-repeat="demo in item.demos">
+                                    <div class="col-2"> {{demo._id}} </div>
+                                    <div class="col-10"> {{demo.title}} </div>
                                 </li>
                             </ul>
                         </div>
-    
+                        <hr>
                         <div class="description padded font-1" ng-show="showExtended"> 
                             Prizes Redeemed: 
-                            <ul class="padded">
-                                <li ng-repeat="prize in item.redemptions">
-                                    {{prize._id}} - {{prize.title}} - {{prize.points}} points
+                            <ul>
+                                <li class="row description padded font-1" ng-repeat="prize in item.redemptions">
+                                    <div class="col-4"> {{prize._id}} </div>
+                                    <div class="col-4"> {{prize.title}} </div>
+                                    <div class="col-4"> {{prize.points}} points </div>
                                 </li>
                             </ul>
                         </div>
@@ -139,7 +185,7 @@
     
                 <!-- IF Error messages -->
                 <div class="row errorMessageContainer" ng-show="errorMessage.show">
-                    <div ng-click="showDemoStations = false; createDemo = false; errorMessage.show = false;" class="tile">
+                    <div ng-click="showAttendees = false; createAttendee = false; errorMessage.show = false;" class="tile">
                         <div class="title font-6"> {{errorMessage.title}}  </div>
                         <hr>
                         <ul class="description padded font-1">
@@ -151,7 +197,7 @@
 
 
                 <!-- ...................................... Testing Loggin Demo for Attendee ...................................... -->
-                <!-- <form action="/api/attendee/badgeId/123546789/demo/5a958a5fe1a3a2cbd9ebea24" method="POST">
+                <!-- <form action="/api/attendee/badgeId/123456789/demo/5a96fd56d169f0306481f7b4" method="POST">
                     <input type="submit" value="Post Demo for Attendee" />
                 </form> -->
                 <!-- .............................................................................................................. -->
@@ -160,6 +206,10 @@
                 <!-- <form action="/api/attendee/badgeId/test_badgeNumber/redeemPrize/5a944edbb322b292ae169d8f" method="POST">
                     <input type="submit" value="submit">
                 </form> -->
+                <!-- ................................................................................................................. -->
+
+                <!-- ............................................ API call to RFID API ............................................ -->
+                <!-- <button ng-click="lookupRfid('OTk5MzMeMTc0MR9Nci4fZmlyc3RuYW1lIDkzNB9sYXN0bmFtZSA5MzQfbWlkZGxlbmFtZSA5MzQfU3IuH+fW8wJ8xWcr7HzUSE4gM+GtKRoJ7zce6UTeNEXozPsS1gJmbRlSluha5fHAGrkIY/5xnDjqGnwrDEDdVW7mrYmeLmLn8D8PXV7Ke9Sp6LqTivHl+TlEWeTD+5kTT40TztgCKeQhGJ9PXRaS2SslZDNi01tlxwXrTPllvZG2Bp2dDYm46Tmbhs3d/0xDHuJVP+nZAM5Craf4kEAODtANWHrPaQOdMV9dhIKItpQtZVjNNUY4hjtpa3HJ1TBBvRaMh6nPjbBqBtXmOqQ7mNjF6Ci0viPa1GXydrlYrAgWMtvcp83MV+i6WZzTgRExdJlqVDiqE04EhlJ6UkNRrsk+MG6EUB3ZFWGvZA==')">Lookup RFID</button> -->
                 <!-- ................................................................................................................. -->
                     
 

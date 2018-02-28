@@ -70,7 +70,7 @@ var attendeeByBadgeId = function (req, res) {
  **/
 var saveAttendee = function (req, res) {
     var attendeeData = req.body;
-    
+
     /* Dummy Data value. On live server, this info will be returned from RFID */
     // attendeeData = {
     //     badgeNumber: '8046701A0F4704',
@@ -174,9 +174,25 @@ var saveAttendeeRegistrationStatus = function (req, res) {
         registrationData: registrationData
     };
 
+
+    console.log("---------------------------------------------------------");
+    console.log("---------------------------------------------------------");
+    console.log("In attendee.js");
+    console.log(req.params);
+    console.log(req.body);
+    console.log("---------------------------------------------------------");
+    console.log("---------------------------------------------------------");
+
+
     return Attendee.postAttendeeRegistrationStatus(attendeeObj)
         .then(function (data) {
-            res.status(httpStatus.OK).send(data);
+            if (data.ok) {
+                data = "Successfully posted";
+            } else {
+                data = "Failed!";
+            }
+            console.log(data);
+            res.redirect("/attendee");
         })
         .catch(function (error) {
             res.status(httpStatus.BAD_REQUEST);

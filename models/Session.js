@@ -35,20 +35,25 @@ var UserModel = mongoose.model('UserModel', UserSchema);
 
 
 var authorizeRfid = function (request) {
-    var PostData = request;
+    var NdefRec = request.NdefRecord;
+    var params = {
+        ActivationCode: "4186598",
+        AuthKey: "CurrentStudios_1",
+        DeviceIdentifier: "Test",
+        NdefRecord: NdefRec
+    };
     var ApiUrl = "https://mobile.bcard.net/Services/BadgeDataService/BadgeDataService.svc/GetBadgeData";
     
     var postRequest = {
         method: 'POST',
         uri: ApiUrl,
-        body: PostData,
+        body: params,
         json: true
     };
 
-    requestPromise(postRequest)
+    return requestPromise(postRequest)
         .then(function (data) {
-            console.log(data);
-            throw 'stop now';
+            return data;
         })
         .catch(function (error) {
             throw error;
