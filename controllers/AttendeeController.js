@@ -37,7 +37,7 @@
             },
             {
                 title: "Register Attendee",
-                description: "Register a new Attendee",
+                description: "Register a new Attendee Manually; used as a fallback plan",
                 action: function () {
                     $scope.header.subTitle = "Create a new Attendee";
                     $scope.showAttendees = false;
