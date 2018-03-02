@@ -18,7 +18,9 @@ var DemoSchema = new Schema({
         required: true,
         auto: true,
     },
+    index: Number,
     title: String,
+    points: Number,
     team: String,
     category: String,
     description: String,
@@ -67,7 +69,6 @@ var getDemoByTitle = function (name) {
 var postDemo = function (data) {
     data = JSON.parse(data);
     data.id = id;
-    /* validateData(data) */
     var demoData = new DemoModel(data);
 
     return demoData.save()

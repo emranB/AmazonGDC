@@ -27,14 +27,26 @@
                 <a ng-hide="showExtended" class="tile" ui-sref="demo({demoId: '{{item._id}}' })" ng-repeat="item in demos">
                     <div class="title font-6"> {{item.title}}  </div>
                     <hr>
+                    <div class="row description padded font-1">
+                        <div class="col-6"> Points: </div>
+                        <div class="col-6"> {{item.points}} </div>
+                    </div>
                     <div class="description padded font-1"> {{item.description}} </div>
                 </a>
                 <div ng-show="showExtended" class="tile" ng-repeat="item in demos">
                     <div class="title font-6"> {{item.title}}  </div>
                     <hr>
                     <div class="row description padded font-1">
+                        <div class="col-2"> Index / Spot: </div>
+                        <div class="col-10"> {{item.index}} </div>
+                    </div>
+                    <div class="row description padded font-1">
                         <div class="col-2">Demo ID:</div>
                         <div class="col-10">{{item._id}}</div>
+                    </div>
+                    <div class="row description padded font-1">
+                        <div class="col-2"> Points: </div>
+                        <div class="col-10"> {{item.points}} </div>
                     </div>
                     <div class="row description padded font-1">
                         <div class="col-2"> Team Name: </div>
@@ -59,9 +71,21 @@
             <div class="row form-container" id="demos-container" ng-show="createDemo">
                 <form action="/api/demo" method="POST">
                     <div class="row field">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Index:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
+                            <input type="number" name="index" placeholder="index #" value="" />
+                        </div>
+                    </div>
+                    <div class="row field">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Title:</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
                             <input type="text" name="title" placeholder="title" value="" />
+                        </div>
+                    </div>
+                    <div class="row field">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Points:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
+                            <input type="number" name="points" placeholder="points" value="" />
                         </div>
                     </div>
                     <div class="row field">
