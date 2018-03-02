@@ -7,6 +7,7 @@ body {
     /* background-color: #e74c3c;
     animation: bg-color 20s infinite;
     -webkit-animation: bg-color 10s infinite; */
+    color: white;
 }
 
 @-webkit-keyframes bg-color {
@@ -17,7 +18,7 @@ body {
     80% { background-color: #9b59b6; }
     100% { background-color: #e74c3c; } */
   }
-  
+
   @keyframes bg-color {
     /* 0% { background-color: #e74c3c; }
     20% { background-color: #f1c40f; }
@@ -26,7 +27,7 @@ body {
     80% { background-color: #9b59b6; }
     100% { background-color: #e74c3c; } */
   }
-  
+
 .ng-hide.ng-hide-animate {
     display: none !important;
 }
@@ -124,7 +125,7 @@ body {
 .dark-green-bg { background: #3ae374; }
 
 .light-blue-bg { background: #18dcff; }
-.dark-blue-bg { background: #17c0eb; }
+.dark-blue-bg { background: #232F3E; color: #FF9900; }
 
 .light-yellow-bg { background: #fffa65; }
 .dark-yellow-bg { background: #fff200; }
@@ -156,7 +157,7 @@ body {
     min-height: 90vh;
     overflow: auto;
     width: 100vw;
-    background: #ffaf40;
+    background: #232F3E;
 }
 .body-bottom-segment {
     height: 10vh;
@@ -204,7 +205,7 @@ body {
 .field input[type=text], .field input[type=password], .field input[type=number],  .field textarea, .field select {
     border: 2px solid white;
     border-radius: 10px;
-    background: transparent;
+    /* background: transparent; */
     color: black;
     padding: 0 10px;
     width: 100%;
@@ -274,7 +275,7 @@ body {
 }
 a.tile {
     margin: 2.5%;
-    padding: 2%;    
+    padding: 2%;
     display: inline-block;
     width: 28.33%;
     vertical-align: middle;
@@ -291,7 +292,7 @@ a.tile {
 }
 div.tile {
     margin: 2.5%;
-    padding: 2%;    
+    padding: 2%;
     display: block;
     width: 95%;
     vertical-align: middle;
@@ -354,12 +355,12 @@ a.tile:hover {
 }
 .logout-button {
     padding: 5px 10px;
-    color: #ff3838 !important;
-    border: 2px solid #ff3838;
+    color: #FF9900 !important;
+    border: 2px solid #FF9900;
     font-weight: bold;
 }
 .logout-button:hover, .logout-button:focus {
-    border: 2px solid red; 
+    border: 2px solid red;
     color: white !important;
     background: red !important;
 }
@@ -376,28 +377,28 @@ a.tile:hover {
       -o-transition:all .5s ease-in-out;
       transition:all .5s ease-in-out;
   }
-  
+
   [ui-view].ng-enter {
     opacity: 0;
     -webkit-transform:scale3d(0.5, 0.5, 0.5);
     -moz-transform:scale3d(0.5, 0.5, 0.5);
     transform:scale3d(0.5, 0.5, 0.5);
   }
-  
+
   [ui-view].ng-enter-active {
     opacity: 1;
     -webkit-transform:scale3d(1, 1, 1);
     -moz-transform:scale3d(1, 1, 1);
     transform:scale3d(1, 1, 1);
   }
-  
+
   [ui-view].ng-leave {
     opacity: 1;
     -webkit-transform:translate3d(0, 0, 0);
     -moz-transform:translate3d(0, 0, 0);
     transform:translate3d(0, 0, 0);
   }
-  
+
   [ui-view].ng-leave-active {
     opacity: 0;
     -webkit-transform:translate3d(100px, 0, 0);
