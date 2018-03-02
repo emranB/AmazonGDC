@@ -24,13 +24,13 @@ var attendees = function (req, res) {
 
 /**
  * GET /attendee/id/:id
- * Get an Attendee by ID 
+ * Get an Attendee by ID
  **/
 var attendeeById = function (req, res) {
     var attendeeId = req.params.id;
-    if (!attendeeId) 
+    if (!attendeeId)
         throw 'Missing Attendee Id';
-    
+
     return Attendee.getAttendeeById(attendeeId)
         .then(function (data) {
             res.status(httpStatus.OK).send(data);
@@ -45,12 +45,12 @@ var attendeeById = function (req, res) {
 
 /**
  * GET /api/attendee/badgeId/:id
- * Get an Attendee by Badge ID 
+ * Get an Attendee by Badge ID
  **/
 var attendeeByBadgeId = function (req, res) {
     var badgeId = req.params.id;
-    if (!badgeId) 
-        throw 'Missing Badge Id';  
+    if (!badgeId)
+        throw 'Missing Badge Id';
 
     return Attendee.getAttendeeByBadgeId(badgeId)
         .then(function (data) {
@@ -66,7 +66,7 @@ var attendeeByBadgeId = function (req, res) {
 
 /**
  * POST /api/attendee
- * Create or Update an Attendee 
+ * Create or Update an Attendee
  **/
 var saveAttendee = function (req, res) {
     var attendeeData = req.body;
@@ -82,8 +82,8 @@ var saveAttendee = function (req, res) {
     //     company: 'test_company'
     // };
     /**************************************************************************/
-    
-    if (!attendeeData) 
+
+    if (!attendeeData)
         throw 'Missing Attendee Data';
 
     var compileAttendeeObject = function () {
@@ -101,7 +101,7 @@ var saveAttendee = function (req, res) {
                         question_4: 'false',
                         complete: 'false'
                     };
-                
+
                     var questionnaire = [
                         {
                             question: 'This is question 0',
@@ -124,28 +124,35 @@ var saveAttendee = function (req, res) {
                             answer: ''
                         }
                     ];
-                
+
                     attendeeData.registrationStatus = registrationStatus;
                     attendeeData.questionnaire = questionnaire;
+
                     attendeeData.demos = [];
                     attendeeData.pointsAccumulated = 0;
                     attendeeData.pointsCount = 0;
                     attendeeData.redemptions = [];
                     attendeeData.extraQuestionnaire = 'false';
                 }
-    
-                return attendeeData;
+
+                Demo.getAllDemos().then(function (data) {
+                  shuffle(data);
+                  attendeeData.demos = data.splice(0, 6);
+                  return attendeeData;
+                });
+
+
             })
             .catch(function (error) {
                 res.status(httpStatus.BAD_REQUEST);
                 throw error;
             });
     };
-    
+
     var postAttendee = function (attendeeData) {
         return Attendee.postAttendee(attendeeData);
     };
-        
+
     /* Chain functions together in final call */
     return compileAttendeeObject()
         .then(postAttendee)
@@ -163,7 +170,7 @@ var saveAttendee = function (req, res) {
 
 /**
  * POST /api/attendee/badgeId/:id/registrationStatus
- * Update Registration Status 
+ * Update Registration Status
  **/
 var saveAttendeeRegistrationStatus = function (req, res) {
     var badgeNumber = req.params.id;
@@ -204,7 +211,7 @@ var saveAttendeeRegistrationStatus = function (req, res) {
 
 /**
  * POST /api/attendee/badgeId/:badgeId/demo/:demoId
- * Update Registration Status 
+ * Update Registration Status
  **/
 var saveAttendeeDemo = function (req, res) {
     var badgeId = req.params.badgeId;
@@ -218,7 +225,7 @@ var saveAttendeeDemo = function (req, res) {
                     badgeId: badgeId,
                     demo: demo
                 };
-                
+
                 return attendeeDemoObj;
             })
             .catch(function (error) {
@@ -277,7 +284,7 @@ var redeemPrize = function (req, res) {
                 throw error;
             });
     };
-    
+
     /* Get available points that Attendee has not Redeemed */
     var getAttendeePoints = function () {
         return Attendee.getAttendeeByBadgeId(badgeNumber, "pointsCount")
@@ -370,3 +377,13 @@ AttendeeExports = {
 };
 
 module.exports = AttendeeExports;
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+}
