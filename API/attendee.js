@@ -87,9 +87,13 @@ var saveAttendee = function (req, res) {
         throw 'Missing Attendee Data';
 
     var compileAttendeeObject = function () {
+      return Demo.getAllDemos().then(function (demos) {
+        shuffle(demos);
+
         return Attendee.getAttendeeByBadgeId(attendeeData.badgeNumber)
             .then(function (response) {
                 /* Append dummy value fields for Badge Number being used for the first time */
+                console.log(response);
                 if (response == null) {
                     var registrationStatus = {
                         scanned: 'true',
@@ -128,25 +132,21 @@ var saveAttendee = function (req, res) {
                     attendeeData.registrationStatus = registrationStatus;
                     attendeeData.questionnaire = questionnaire;
 
-                    attendeeData.demos = [];
+                    // attendeeData.demos = [];
+                    attendeeData.demos = demos.splice(0, 6);
                     attendeeData.pointsAccumulated = 0;
                     attendeeData.pointsCount = 0;
                     attendeeData.redemptions = [];
                     attendeeData.extraQuestionnaire = 'false';
                 }
 
-                Demo.getAllDemos().then(function (data) {
-                  shuffle(data);
-                  attendeeData.demos = data.splice(0, 6);
-                  return attendeeData;
-                });
-
-
+                return attendeeData;
             })
             .catch(function (error) {
                 res.status(httpStatus.BAD_REQUEST);
                 throw error;
             });
+          });
     };
 
     var postAttendee = function (attendeeData) {
