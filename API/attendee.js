@@ -132,8 +132,8 @@ var saveAttendee = function (req, res) {
                     attendeeData.registrationStatus = registrationStatus;
                     attendeeData.questionnaire = questionnaire;
 
-                    // attendeeData.demos = [];
-                    attendeeData.demos = demos.splice(0, 6);
+                    attendeeData.demos = [];
+                    attendeeData.recomendedDemos = demos.splice(0, 6);
                     attendeeData.pointsAccumulated = 0;
                     attendeeData.pointsCount = 0;
                     attendeeData.redemptions = [];
