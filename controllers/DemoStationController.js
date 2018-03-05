@@ -36,7 +36,7 @@
                 }
             },
             {
-                title: "Create Demo Station",
+                title: "Create / Edit Demo Station",
                 description: "Create a new Demo Station",
                 action: function () {
                     $scope.header.subTitle = "Create a new Demo Station";
@@ -76,7 +76,13 @@
                     .then(function (data) {
                         $scope.demoStations = [];
                         var demoStation = data.data;
-                        $scope.header.subTitle = "Affiliated Demo: " + demoStation.demo.title;
+                        var title = "";
+                        if (!demoStation.demo) {
+                            title = "(no demo)";
+                        } else {
+                            title = demoStation.demo.title
+                        }
+                        $scope.header.subTitle = title;
                         $scope.demoStations.push(demoStation);
                         $scope.showExtended = true;
 
@@ -121,8 +127,12 @@
         loadPage();
 
         /* Create a new Demo Station */
-        $scope.submitNewDemoStation = function (demo) {
-            return $http.post("/api/demoStation", demo)
+        $scope.submitNewDemoStation = function (piId, demo) {
+            var demoStation = {
+                piId: piId,
+                demo: demo
+            };
+            return $http.post("/api/demoStation", demoStation)
                 .then(function (data) {
                     $state.reload();
                 });

@@ -18,6 +18,7 @@ router.route('/demo').post(demoExports.saveDemo);
 /* Demo Stations */
 router.route('/demoStations').get(demoStationExports.allDemoStations);
 router.route('/demoStation/id/:_id').get(demoStationExports.demoStationbyId);
+router.route('/demoStation/piId/:id').get(demoStationExports.demoStationbyPiId);
 router.route('/demoStation/demoId/:id').get(demoStationExports.demoStationByDemoId);
 router.route('/demoStation').post(demoStationExports.saveDemoStation);
 
@@ -35,6 +36,15 @@ router.route('/attendee/badgeId/:id').get(attendeeExports.attendeeByBadgeId);
 router.route('/attendee').post(attendeeExports.saveAttendee);
 router.route('/attendee/badgeId/:id/registrationStatus').post(attendeeExports.saveAttendeeRegistrationStatus);
 router.route('/attendee/badgeId/:badgeId/demo/:demoId').post(attendeeExports.saveAttendeeDemo);
+
+
+
+
+router.route('/attendee/logDemoByDemoStation').post(attendeeExports.saveAttendeeDemoByPiId);
+
+
+
+
 router.route('/attendee/badgeId/:badgeId/redeemPrize/:prizeId').post(attendeeExports.redeemPrize);
 
 /* Session */

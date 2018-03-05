@@ -18,10 +18,8 @@ var DemoStationSchema = new Schema({
         required: true,
         auto: true,
     },
-    demo: {
-        type: Object,
-        required: true
-    }
+    piId: String,
+    demo: Object
 },
 {
     collection: 'demoStation',
@@ -47,6 +45,13 @@ var getDemoStationById = function (id) {
         });
 };
 
+var getDemoStationByPiId = function (id) {
+    return DemoStationModel.findOne({piId: id})
+        .then(function (response) {
+            return response;
+        });
+};
+
 var getDemoStationByDemoId = function (id) {
     return DemoStationModel.findOne({demoId: id})
         .then(function (response) {
@@ -55,19 +60,58 @@ var getDemoStationByDemoId = function (id) {
 };
 
 var postDemoStation = function (data) {
-    data = JSON.parse(data);
-    data._id = mongoose.Types.ObjectId(data._id);
-    var demoStationData = {
-        id: id,
-        demo: data
-    };
-    demoStationData = new DemoStationModel(demoStationData);
+    var piId = data.piId;
+    var demo = {};
 
-    return demoStationData.save()
-        .then(function (response) {
-            return response;
-        });
+    /* Check if demoStation exists */
+    var checkIfExists = function () {
+        return getDemoStationByPiId(piId)
+            .then(function (demoStation) {
+                if (demoStation) {
+                    if (data.demo && data.demo._id) {
+                        demo = data.demo;
+                        return updateDemoStation(demo);
+                    } else {
+                        return getDemoStationByPiId(piId)
+                            .then(function (demoStation) {
+                                demo = demoStation.demo;
+                                return demo;
+                            });
+                    }
+                } else {
+                    return updateDemoStation(demo);
+                }
+            });
+    };
+
+    // var getDemoForDemoStation = function (demoStation) {
+        
+    // };
+
+    var updateDemoStation = function (demo) {
+        return DemoStationModel.findOneAndUpdate(
+            {piId: data.piId},
+            {
+                $set: {
+                    demo: demo
+                }
+            },
+            {upsert: true, new: true}
+        ).exec();
+    };
+
+    return checkIfExists();
+        // .then(getDemoForDemoStation)
+        // .then(function (demoStation) {
+        //     return updateDemoStation()
+        //         .then(function (data) {
+        //             return data;
+        //         });
+        // });
+
 };
+
+
 
 
 /**
@@ -76,6 +120,7 @@ var postDemoStation = function (data) {
 DemoStation = {
     getAllDemoStations: getAllDemoStations,
     getDemoStationById: getDemoStationById,
+    getDemoStationByPiId: getDemoStationByPiId,
     getDemoStationByDemoId: getDemoStationByDemoId,
     postDemoStation: postDemoStation
 };

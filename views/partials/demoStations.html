@@ -25,37 +25,41 @@
             <div class="row tile-container demos-container" id="demos-container" ng-show="demoStations.length && showDemoStations">
                 <a class="tile" ng-hide="showExtended" ng-class="showExtended ? 'col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-3 col-md-3 col-sm-12 col-xs-12'" ui-sref="demoStation({demoStationId: '{{item._id}}' })" ng-repeat="item in demoStations">
                     <div class="description padded font-1"> Affiliated Demo:  </div>
-                    <div class="title font-6"> {{item.demo.title}}  </div>
+                    <div class="title font-6"> {{item.demo.title || "(no demo)"}}  </div>
                     <hr>
                     <div class="description padded font-1"> {{item.demo.description}} </div>
                 </a>
                 <div class="tile" ng-show="showExtended" ng-repeat="item in demoStations"> 
                     <div class="description padded font-1"> Affiliated Demo: </div>
-                    <div class="title font-6"> {{item.demo.title}}  </div>
+                    <div class="title font-6"> {{item.demo.title || "(no demo)"}}  </div>
                     <hr>
                     <div class="row description padded font-1">
+                        <div class="col-2"> Demo Station PI ID: </div>
+                        <div class="col-10"> {{item.piId || ""}} </div>
+                    </div>
+                    <div class="row description padded font-1">
                         <div class="col-2"> Demo Station ID: </div>
-                        <div class="col-10"> {{item._id}} </div>
+                        <div class="col-10"> {{item._id || ""}} </div>
                     </div>
                     <div class="row description padded font-1">
                         <div class="col-2"> Demo ID: </div>
-                        <div class="col-10"> {{item.demo._id}} </div>
+                        <div class="col-10"> {{item.demo._id || ""}} </div>
                     </div>
                     <div class="row description padded font-1">
                         <div class="col-2"> Demo Team: </div>
-                        <div class="col-10"> {{item.demo.team}} </div>
+                        <div class="col-10"> {{item.demo.team || ""}} </div>
                     </div>
                     <div class="row description padded font-1">
                         <div class="col-2"> Demo Category: </div>
-                        <div class="col-10"> {{item.demo.team}} </div>
+                        <div class="col-10"> {{item.demo.team || ""}} </div>
                     </div>
                     <div class="row description padded font-1">
                         <div class="col-2"> Demo Description </div>
-                        <div class="col-10"> {{item.demo.description}} </div>
+                        <div class="col-10"> {{item.demo.description || ""}} </div>
                     </div>
                     <div class="row description padded font-1">
                         <div class="col-2"> Require Checkout </div>
-                        <div class="col-10"> {{item.demo.requireCheckout}} </div>
+                        <div class="col-10"> {{item.demo.requireCheckout || ""}} </div>
                     </div>
                 </div>
             </div>
@@ -63,6 +67,12 @@
             <!-- IF Creating a new Demo -->
             <div class="row form-container" id="demoStations-container" ng-show="createDemoStation">
                 <form>
+                    <div class="row field">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">PI Id:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
+                            <input type="text" name="piId" ng-model="piId" placeholder="team" value="000000000a0d9439" />
+                        </div>
+                    </div>
                     <div class="row field">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Affiliated Demo:</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
@@ -74,7 +84,7 @@
                     <br>
                     <div class="row field">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <input class="full-width-size form-submit" type="submit" ng-click="submitNewDemoStation(affiliatedDemo)" value="Submit">
+                            <input class="full-width-size form-submit" type="submit" ng-click="submitNewDemoStation(piId, affiliatedDemo)" value="Submit">
                         </div>
                     </div>
                 </form>

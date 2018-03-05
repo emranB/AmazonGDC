@@ -20,6 +20,7 @@ var allDemoStations = function (req, res) {
 
 
 
+
 /**
  * GET /api//demoStation/id/:_id
  * Get a single DemoStation by ID 
@@ -30,6 +31,35 @@ var demoStationbyId = function (req, res) {
         throw 'Missing Station Id';  
 
     DemoStation.getDemoStationById(stationId)
+        .then(function (data) {
+            res.status(httpStatus.OK).send(data);
+        })
+        .catch(function (error) {
+            res.status(httpStatus.BAD_REQUEST);
+            throw error;
+        });
+};
+
+
+
+/**
+ * GET /api/demoStation/piId/:id
+ * Get a single DemoStation by Pi ID 
+ **/
+/**
+ * Look for Demo Station with serial number "stationId"
+ *  If it doesn;t exist
+ *      Create new demos station
+ *      return
+ * ELSE
+ *      Get demostation info  
+ */
+var demoStationbyPiId = function (req, res) {
+    var stationId = req.params.id;
+    if (!stationId)
+        throw 'Missing Station Id';  
+
+    DemoStation.getDemoStationByPiId(stationId)
         .then(function (data) {
             res.status(httpStatus.OK).send(data);
         })
@@ -68,13 +98,18 @@ var demoStationByDemoId = function (req, res) {
  **/
 var saveDemoStation = function (req, res) {
     var postData = req.body;
-    if (!postData || !postData._id) 
+
+    if (!postData) 
         throw 'Missing DemoStation Data';  
 
-    postData = JSON.stringify(postData);
+    console.log("About to update, in demoStation.js");
+    console.log(postData);
 
-    DemoStation.postDemoStation(postData)
+    return DemoStation.postDemoStation(postData)
         .then(function (data) {
+            console.log("in demoStation.js");
+            console.log(data);
+
             res.status(httpStatus.OK).send(data);
         })
         .catch(function (error) {
@@ -90,6 +125,7 @@ DemoStationExports = {
     allDemoStations: allDemoStations,
     demoStationbyId: demoStationbyId,
     demoStationByDemoId: demoStationByDemoId,
+    demoStationbyPiId: demoStationbyPiId,
     saveDemoStation: saveDemoStation
 };
 

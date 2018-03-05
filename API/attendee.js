@@ -1,7 +1,9 @@
 var httpStatus = require('http-status-codes');
 Attendee = require('../models/Attendee');
 Demo = require('../models/Demo');
+DemoStation = require('../models/DemoStation');
 Prize = require('../models/Prize');
+Session = require('../models/Session');
 
 
 
@@ -48,6 +50,7 @@ var attendeeById = function (req, res) {
  * Get an Attendee by Badge ID
  **/
 var attendeeByBadgeId = function (req, res) {
+    console.log(req.params);
     var badgeId = req.params.id;
     if (!badgeId)
         throw 'Missing Badge Id';
@@ -181,16 +184,6 @@ var saveAttendeeRegistrationStatus = function (req, res) {
         registrationData: registrationData
     };
 
-
-    console.log("---------------------------------------------------------");
-    console.log("---------------------------------------------------------");
-    console.log("In attendee.js");
-    console.log(req.params);
-    console.log(req.body);
-    console.log("---------------------------------------------------------");
-    console.log("---------------------------------------------------------");
-
-
     return Attendee.postAttendeeRegistrationStatus(attendeeObj)
         .then(function (data) {
             if (data.ok) {
@@ -260,6 +253,160 @@ var saveAttendeeDemo = function (req, res) {
             throw error;
         });
 };
+
+
+
+
+
+/**
+ * POST /api/attendee/logDemoByDemoStation
+ * Extract demo from demoStation and save in attendee object
+ **/
+var saveAttendeeDemoByPiId = function (req, res) {
+    
+    var attendeeEcryptedId = req.body.attendeeEncryptedId;
+    var piId = req.body.demoStationId;
+    var badgeId;
+
+    /* Fetch Attendee's Badge ID */
+    var getBadgeInfo = function () {
+        console.log("getBadgeId");
+        return Session.authorizeRfid({NDefRecord: attendeeEcryptedId})
+            .then(function (attendee) {
+                attendee = attendee.BadgeData;
+                badgeId = attendee.StoredUID;
+                return attendee;
+            })
+            .catch(function (error) {
+                throw error;
+            });
+    };
+
+    var updateAttendee = function (attendee) {
+        // console.log("attendee.js, attendee:", attendee);
+        return Attendee.getAttendeeByBadgeId(badgeId)
+            .then(function (response) {
+                if (!response) {
+                    attendeeData = {
+                        badgeNumber: attendee.StoredUID,
+                        firstName: attendee.Firstname,
+                        lastName: attendee.Lastname,
+                        email: attendee.Email,
+                        phone: attendee.Phone1,
+                        title: attendee.Tile,
+                        company: attendee.Company
+                    }
+
+                    var registrationStatus = {
+                        scanned: 'true',
+                        terms: 'false',
+                        question_0: 'false',
+                        question_1: 'false',
+                        question_2: 'false',
+                        question_3: 'false',
+                        question_4: 'false',
+                        complete: 'false'
+                    };
+                
+                    var questionnaire = [
+                        {
+                            question: 'This is question 0',
+                            answer: ''
+                        },
+                        {
+                            question: 'This is question 1',
+                            answer: ''
+                        },
+                        {
+                            question: 'This is question 2',
+                            answer: ''
+                        },
+                        {
+                            question: 'This is question 3',
+                            answer: ''
+                        },
+                        {
+                            question: 'This is question 4',
+                            answer: ''
+                        }
+                    ];
+                
+                    attendeeData.registrationStatus = registrationStatus;
+                    attendeeData.questionnaire = questionnaire;
+                    attendeeData.demos = [];
+                    attendeeData.pointsAccumulated = 0;
+                    attendeeData.pointsCount = 0;
+                    attendeeData.redemptions = [];
+                    attendeeData.extraQuestionnaire = 'false';
+
+                    return Attendee.postAttendee(attendeeData);
+                } else {
+                    return attendee;
+                }
+
+            });
+    };
+
+    /* Create or Update the demoStation */
+    var postDemoStation = function () {
+        console.log("postDemoStation");
+        
+        return DemoStation.postDemoStation({piId: piId})
+            .then(function (demoStation) {
+                return demoStation;
+            })
+            .catch(function (error) {
+                throw error;
+            });
+    }; 
+
+    /* Save demo details in Attendee's profile */
+    var postAttendeeDemo = function (demo) {
+        
+        if (!demo || !demo._id) {
+            console.log("no demo");
+        }
+
+        var attendeeDemoObj = {
+            badgeId: badgeId,
+            demo: demo
+        };
+        
+        return Attendee.postAttendeeDemo(attendeeDemoObj)
+            .then(function (response) {
+                // console.log("In attendee.js");
+                // console.log(response);
+                return response;
+            })
+            .catch(function (error) {
+                throw error;
+            });
+    };
+
+    /* Chain together promises for final function call */
+    return getBadgeInfo()
+        .then(updateAttendee)
+        .then(postDemoStation)
+        .then(function (demo) {
+            if (demo) {
+                console.log("attendeejs: ", demo);
+                return postAttendeeDemo(demo)
+                    .then(function () {
+                        console.log("Posting Attedee Demo");
+                        res.send(demo);
+                    });
+            } else {
+                res.send("No demo to post");
+            }
+        })
+        .catch(function (error) {
+            res.status(httpStatus.BAD_REQUEST);
+            throw error;
+        });
+};
+
+
+
 
 
 
@@ -373,6 +520,7 @@ AttendeeExports = {
     saveAttendee: saveAttendee,
     saveAttendeeRegistrationStatus: saveAttendeeRegistrationStatus,
     saveAttendeeDemo: saveAttendeeDemo,
+    saveAttendeeDemoByPiId: saveAttendeeDemoByPiId,
     redeemPrize: redeemPrize
 };
 
