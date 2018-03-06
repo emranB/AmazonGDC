@@ -10,6 +10,7 @@ Session = require('../models/Session');
  * Create a New Session for a User using RFID values
  **/
 var authorizeUserByRfid = function (req, res) {
+
     return Session.authorizeRfid(req.body)
         .then(function (data) {
             res.send(data);

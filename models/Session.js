@@ -1,12 +1,12 @@
-/** 
- * Connection 
+/**
+ * Connection
  **/
 var mongoose = require('mongoose');
 var uri = 'mongodb://localhost:27017/amazon_gdc';
 var connection = mongoose.connect(uri);
 var requestPromise = require('request-promise');
 
-/** 
+/**
  * Define Schema
  **/
 var Schema = mongoose.Schema;
@@ -26,7 +26,7 @@ var UserSchema = new Schema({
         type: String,
         required: true
     }
-}, 
+},
 {
     collection: 'user',
     versionKey: false
@@ -35,8 +35,7 @@ var UserModel = mongoose.model('UserModel', UserSchema);
 
 
 var authorizeRfid = function (request) {
-
-    var NdefRec = request.NDefRecord;
+    var NdefRec = request.NdefRecord;
     var params = {
         ActivationCode: "4186598",
         AuthKey: "CurrentStudios_1",
@@ -44,7 +43,7 @@ var authorizeRfid = function (request) {
         NdefRecord: NdefRec
     };
     var ApiUrl = "https://mobile.bcard.net/Services/BadgeDataService/BadgeDataService.svc/GetBadgeData";
-    
+
     var postRequest = {
         method: 'POST',
         uri: ApiUrl,
@@ -54,6 +53,7 @@ var authorizeRfid = function (request) {
 
     return requestPromise(postRequest)
         .then(function (data) {
+            //console.log("GOT ITN DATA", data);
             return data;
         })
         .catch(function (error) {

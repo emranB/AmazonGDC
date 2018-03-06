@@ -96,7 +96,7 @@ var saveAttendee = function (req, res) {
         return Attendee.getAttendeeByBadgeId(attendeeData.badgeNumber)
             .then(function (response) {
                 /* Append dummy value fields for Badge Number being used for the first time */
-                console.log(response);
+                console.log('get by badge number', response);
                 if (response == null) {
                     var registrationStatus = {
                         scanned: 'true',
@@ -263,7 +263,7 @@ var saveAttendeeDemo = function (req, res) {
  * Extract demo from demoStation and save in attendee object
  **/
 var saveAttendeeDemoByPiId = function (req, res) {
-    
+
     var attendeeEcryptedId = req.body.attendeeEncryptedId;
     var piId = req.body.demoStationId;
     var badgeId;
@@ -307,7 +307,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
                         question_4: 'false',
                         complete: 'false'
                     };
-                
+
                     var questionnaire = [
                         {
                             question: 'This is question 0',
@@ -330,7 +330,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
                             answer: ''
                         }
                     ];
-                
+
                     attendeeData.registrationStatus = registrationStatus;
                     attendeeData.questionnaire = questionnaire;
                     attendeeData.demos = [];
@@ -350,7 +350,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
     /* Create or Update the demoStation */
     var postDemoStation = function () {
         console.log("postDemoStation");
-        
+
         return DemoStation.postDemoStation({piId: piId})
             .then(function (demoStation) {
                 return demoStation;
@@ -358,11 +358,11 @@ var saveAttendeeDemoByPiId = function (req, res) {
             .catch(function (error) {
                 throw error;
             });
-    }; 
+    };
 
     /* Save demo details in Attendee's profile */
     var postAttendeeDemo = function (demo) {
-        
+
         if (!demo || !demo._id) {
             console.log("no demo");
         }
@@ -371,7 +371,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
             badgeId: badgeId,
             demo: demo
         };
-        
+
         return Attendee.postAttendeeDemo(attendeeDemoObj)
             .then(function (response) {
                 // console.log("In attendee.js");
