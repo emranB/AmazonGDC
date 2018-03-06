@@ -35,12 +35,13 @@ var UserModel = mongoose.model('UserModel', UserSchema);
 
 
 var authorizeRfid = function (request) {
-    var NdefRec = request.NdefRecord;
+
+    var NdefRec = request.NDefRecord;
     var params = {
         ActivationCode: "4186598",
         AuthKey: "CurrentStudios_1",
         DeviceIdentifier: "Test",
-        NdefRecord: NdefRec
+        NDefRecord: NdefRec
     };
     var ApiUrl = "https://mobile.bcard.net/Services/BadgeDataService/BadgeDataService.svc/GetBadgeData";
 

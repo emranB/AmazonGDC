@@ -254,6 +254,7 @@ var postAttendeeDemo = function (data) {
     var updateAttendeeDemoViews = function (viewedDemos) {
         demo = JSON.parse(JSON.stringify(demo));
 
+
         var viewedDemoIds = [];
 
         // data = badgeId + demo
@@ -282,6 +283,16 @@ var postAttendeeDemo = function (data) {
         }
         
 
+        console.log("Last demo occurs");
+        var lastDemoOccurance = viewedDemos.reverse().find(function (row) {
+            return row._id = demo._id;
+        });
+        // console.log(lastDemoOccurance);
+
+
+
+
+        demo.timeStamp = Date.now();
         /********************************************************************************************************************** 
          ** - Check if demo has "requireCheckout"
          **         IF demo has "requireCheckout"
@@ -304,6 +315,7 @@ var postAttendeeDemo = function (data) {
          **                             - Initiate current demo object with "checkedIn='true'" and "checkedOut='false'"
          **                             - Push demo into Attendee object
          **********************************************************************************************************************/
+        // && lastDemoOccurance.timeStamp >= (Date.now() + 5000)
         if (demo.requireCheckout == "true") {
             if (viewedDemoIds.indexOf(viewingDemoId) == -1) {   
                 demo.checkedIn = "true";
@@ -321,10 +333,15 @@ var postAttendeeDemo = function (data) {
             } else {                                                                
                 var lastViewedDemo = viewedDemos[viewedDemos.length - 1];
                 var lastViewedDemoId = viewedDemoIds[viewedDemoIds.length - 1];     
+                var okTime = Date.now() + 25000;
+                // console.log("-------------------------------------------------")
+                // console.log(lastViewedDemo.timeStamp)
+                // console.log(okTime);
+                // console.log(okTime - lastViewedDemo.timeStamp);
+                // console.log("-------------------------------------------------")
                 
-                if (viewingDemoId == lastViewedDemoId) {  
-                    demo.checkedIn = "true";
-                    demo.checkedOut = "true";                                      
+                if ((viewingDemoId == lastViewedDemoId) && (okTime > lastViewedDemo.timeStamp) && (lastViewedDemo.checkedOut == "false")) {  
+                    console.log("setting to truie");                                      
 
                     if (lastViewedDemo.checkedOut == "true") {                    
                         return AttendeeModel.findOneAndUpdate(                                
@@ -337,6 +354,9 @@ var postAttendeeDemo = function (data) {
                             {new: true}
                         ).exec();
                     } else {
+                        demo.checkedIn = "true";
+                        demo.checkedOut = "true";
+
                         return AttendeeModel.findOneAndUpdate(
                             {badgeNumber: badgeId},
                             {
@@ -364,12 +384,6 @@ var postAttendeeDemo = function (data) {
                         },
                         {new: true}
                     ).exec();
-                    // .then(function (response) {
-                    //     return response;
-                    // })
-                    // .catch(function (error) {
-                    //     throw error;
-                    // });
                 }
             }
         }

@@ -102,7 +102,7 @@
         /* Lookup Attendee RFID */
         $scope.lookupRfid = function (NdefRec) {
             var params = {
-                NdefRecord: NdefRec
+                NDefRecord: NdefRec
             };
 
             return $http.post("/api/session/authorize/rfid", params)

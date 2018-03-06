@@ -50,7 +50,7 @@ var attendeeById = function (req, res) {
  * Get an Attendee by Badge ID
  **/
 var attendeeByBadgeId = function (req, res) {
-    console.log(req.params);
+    console.log("attendeejs: ", req.params);
     var badgeId = req.params.id;
     if (!badgeId)
         throw 'Missing Badge Id';
@@ -191,7 +191,6 @@ var saveAttendeeRegistrationStatus = function (req, res) {
             } else {
                 data = "Failed!";
             }
-            console.log(data);
             res.redirect("/attendee");
         })
         .catch(function (error) {
@@ -241,11 +240,6 @@ var saveAttendeeDemo = function (req, res) {
     return getDemoDetails()
         .then(postAttendeeDemo)
         .then(function (data) {
-            /* If demo has already been viewed by user, send a conflict message back */
-            // if (data == undefined) {
-            //     data = "Demo has already been viewed by Attendee";
-            // }
-            // console.log(data);
             res.redirect("/attendees");
         })
         .catch(function (error) {
@@ -264,6 +258,7 @@ var saveAttendeeDemo = function (req, res) {
  **/
 var saveAttendeeDemoByPiId = function (req, res) {
 
+    
     var attendeeEcryptedId = req.body.attendeeEncryptedId;
     var piId = req.body.demoStationId;
     var badgeId;
@@ -271,6 +266,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
     /* Fetch Attendee's Badge ID */
     var getBadgeInfo = function () {
         console.log("getBadgeId");
+        // console.trace("getBadgeId");
         return Session.authorizeRfid({NDefRecord: attendeeEcryptedId})
             .then(function (attendee) {
                 attendee = attendee.BadgeData;
@@ -308,6 +304,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
                         complete: 'false'
                     };
 
+                
                     var questionnaire = [
                         {
                             question: 'This is question 0',
@@ -331,6 +328,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
                         }
                     ];
 
+                
                     attendeeData.registrationStatus = registrationStatus;
                     attendeeData.questionnaire = questionnaire;
                     attendeeData.demos = [];
@@ -351,6 +349,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
     var postDemoStation = function () {
         console.log("postDemoStation");
 
+        
         return DemoStation.postDemoStation({piId: piId})
             .then(function (demoStation) {
                 return demoStation;
@@ -363,8 +362,15 @@ var saveAttendeeDemoByPiId = function (req, res) {
     /* Save demo details in Attendee's profile */
     var postAttendeeDemo = function (demo) {
 
-        if (!demo || !demo._id) {
+        if (!demo || !demo._id) 
             console.log("no demo");
+    }; 
+
+    /* Save demo details in Attendee's profile */
+    var postAttendeeDemo = function (demo) {
+        
+        if (!demo || !demo._id) {
+            // console.log("no demo");
         }
 
         var attendeeDemoObj = {
@@ -372,6 +378,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
             demo: demo
         };
 
+        
         return Attendee.postAttendeeDemo(attendeeDemoObj)
             .then(function (response) {
                 // console.log("In attendee.js");
@@ -389,7 +396,7 @@ var saveAttendeeDemoByPiId = function (req, res) {
         .then(postDemoStation)
         .then(function (demo) {
             if (demo) {
-                console.log("attendeejs: ", demo);
+                // console.log("attendeejs: ", demo);
                 return postAttendeeDemo(demo)
                     .then(function () {
                         console.log("Posting Attedee Demo");
