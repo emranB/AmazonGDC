@@ -257,7 +257,6 @@ var saveAttendeeDemo = function (req, res) {
  * Extract demo from demoStation and save in attendee object
  **/
 var saveAttendeeDemoByPiId = function (req, res) {
-
     
     var attendeeEcryptedId = req.body.attendeeEncryptedId;
     var piId = req.body.demoStationId;
@@ -303,7 +302,6 @@ var saveAttendeeDemoByPiId = function (req, res) {
                         question_4: 'false',
                         complete: 'false'
                     };
-
                 
                     var questionnaire = [
                         {
@@ -327,7 +325,6 @@ var saveAttendeeDemoByPiId = function (req, res) {
                             answer: ''
                         }
                     ];
-
                 
                     attendeeData.registrationStatus = registrationStatus;
                     attendeeData.questionnaire = questionnaire;
@@ -348,7 +345,6 @@ var saveAttendeeDemoByPiId = function (req, res) {
     /* Create or Update the demoStation */
     var postDemoStation = function () {
         console.log("postDemoStation");
-
         
         return DemoStation.postDemoStation({piId: piId})
             .then(function (demoStation) {
@@ -377,7 +373,6 @@ var saveAttendeeDemoByPiId = function (req, res) {
             badgeId: badgeId,
             demo: demo
         };
-
         
         return Attendee.postAttendeeDemo(attendeeDemoObj)
             .then(function (response) {

@@ -254,7 +254,6 @@ var postAttendeeDemo = function (data) {
     var updateAttendeeDemoViews = function (viewedDemos) {
         demo = JSON.parse(JSON.stringify(demo));
 
-
         var viewedDemoIds = [];
 
         // data = badgeId + demo
@@ -289,7 +288,6 @@ var postAttendeeDemo = function (data) {
             return row._id = demo._id;
         });
         // console.log(lastDemoOccurance);
-
 
 
 
