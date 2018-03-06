@@ -284,7 +284,8 @@ var postAttendeeDemo = function (data) {
         
 
         console.log("Last demo occurs");
-        var lastDemoOccurance = viewedDemos.reverse().find(function (row) {
+        var lastDemoOccurance = JSON.parse(JSON.stringify(viewedDemos));
+        lastDemoOccurance = lastDemoOccurance.reverse().find(function (row) {
             return row._id = demo._id;
         });
         // console.log(lastDemoOccurance);
@@ -330,18 +331,17 @@ var postAttendeeDemo = function (data) {
                     },
                     {new: true}
                 ).exec();
-            } else {                                                                
+            } else {      
+                
                 var lastViewedDemo = viewedDemos[viewedDemos.length - 1];
                 var lastViewedDemoId = viewedDemoIds[viewedDemoIds.length - 1];     
                 var okTime = Date.now() + 25000;
-                // console.log("-------------------------------------------------")
-                // console.log(lastViewedDemo.timeStamp)
-                // console.log(okTime);
-                // console.log(okTime - lastViewedDemo.timeStamp);
-                // console.log("-------------------------------------------------")
                 
-                if ((viewingDemoId == lastViewedDemoId) && (okTime > lastViewedDemo.timeStamp) && (lastViewedDemo.checkedOut == "false")) {  
-                    console.log("setting to truie");                                      
+                if ((viewingDemoId == lastViewedDemoId) && (okTime > lastViewedDemo.timeStamp)) {  
+                    console.log("setting to truie");   
+                    
+                    demo.checkedIn = "true";
+                    demo.checkedOut = "true";
 
                     if (lastViewedDemo.checkedOut == "true") {                    
                         return AttendeeModel.findOneAndUpdate(                                
@@ -354,8 +354,6 @@ var postAttendeeDemo = function (data) {
                             {new: true}
                         ).exec();
                     } else {
-                        demo.checkedIn = "true";
-                        demo.checkedOut = "true";
                         return AttendeeModel.findOneAndUpdate(
                             {badgeNumber: badgeId},
                             {
