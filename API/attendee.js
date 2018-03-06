@@ -360,11 +360,11 @@ var saveAttendeeDemoByPiId = function (req, res) {
     };
 
     /* Save demo details in Attendee's profile */
-    var postAttendeeDemo = function (demo) {
+    // var postAttendeeDemo = function (demo) {
 
-        if (!demo || !demo._id) 
-            console.log("no demo");
-    }; 
+    //     if (!demo || !demo._id) 
+    //         console.log("no demo");
+    // }; 
 
     /* Save demo details in Attendee's profile */
     var postAttendeeDemo = function (demo) {

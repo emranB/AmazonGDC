@@ -356,7 +356,6 @@ var postAttendeeDemo = function (data) {
                     } else {
                         demo.checkedIn = "true";
                         demo.checkedOut = "true";
-
                         return AttendeeModel.findOneAndUpdate(
                             {badgeNumber: badgeId},
                             {
