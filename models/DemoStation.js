@@ -60,34 +60,56 @@ var getDemoStationByDemoId = function (id) {
 };
 
 var postDemoStation = function (data) {
+
+    if (!data && !data.piId && !data.demo) {
+        throw "DemoStation.js says: No data provided";
+    }
+
     var piId = data.piId;
     var demo = {};
+    if (data.demo && data.demo._id) {
+        demo = data.demo;
+    }
 
     /* Check if demoStation exists */
-    var checkIfExists = function () {
+    var checkIfDemoStationExists = function () {
         return getDemoStationByPiId(piId)
             .then(function (demoStation) {
-                if (demoStation) {
-                    if (data.demo && data.demo._id) {
-                        demo = data.demo;
-                        return updateDemoStation(demo);
-                    } else {
-                        return getDemoStationByPiId(piId)
-                            .then(function (demoStation) {
-                                demo = demoStation.demo;
-                                return demo;
-                            });
-                    }
-                } else {
-                    return updateDemoStation(demo);
-                }
+                return demoStation;
             });
+    };    
+
+    /**
+     * CASE 1: No DemoStation:
+     *      SubCASE A: No Demo:
+     *                  - Create DemoStaion with no Demo
+     *      SubCASE B: Has Demo:
+     *                  - Create DemoStation with Demo
+     * CASE 2: Has DemoStation:
+     *      SubCASE A: No Demo:
+     *                  - Do Nothing
+     *      SubCASE B: Has Demo:
+     *                  - Update DemoStation with new Demo
+     * 
+     * return DemoStation
+     */
+    var controlDemoStation = function (demoStation) {
+        if (demoStation && demoStation._id) {
+            if (demo && demo._id) {
+                return updateDemoStation(demo);
+            } else {
+                return demoStation;
+            }
+        } else {
+            if (demo && demo._id) {
+                return updateDemoStation(demo);
+            } else {
+                return updateDemoStation(demo);
+            }
+        }
     };
 
-    // var getDemoForDemoStation = function (demoStation) {
-        
-    // };
-
+    /* Helper function to update DemoStation when required */
     var updateDemoStation = function (demo) {
         return DemoStationModel.findOneAndUpdate(
             {piId: data.piId},
@@ -100,14 +122,9 @@ var postDemoStation = function (data) {
         ).exec();
     };
 
-    return checkIfExists();
-        // .then(getDemoForDemoStation)
-        // .then(function (demoStation) {
-        //     return updateDemoStation()
-        //         .then(function (data) {
-        //             return data;
-        //         });
-        // });
+    /* Chain promises together in final function call */
+    return checkIfDemoStationExists()
+        .then(controlDemoStation);
 
 };
 

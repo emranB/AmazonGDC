@@ -257,41 +257,34 @@ var saveAttendeeDemo = function (req, res) {
  * Extract demo from demoStation and save in attendee object
  **/
 var saveAttendeeDemoByPiId = function (req, res) {
-    
+
+    var attendee = req.body.attendee;
     var attendeeEcryptedId = req.body.attendeeEncryptedId;
     var piId = req.body.demoStationId;
     var badgeId;
 
-    /* Fetch Attendee's Badge ID */
-    var getBadgeInfo = function () {
-        console.log("getBadgeId");
-        // console.trace("getBadgeId");
-        return Session.authorizeRfid({NDefRecord: attendeeEcryptedId})
-            .then(function (attendee) {
-                attendee = attendee.BadgeData;
-                badgeId = attendee.StoredUID;
-                return attendee;
-            })
-            .catch(function (error) {
-                throw error;
-            });
-    };
+    var updateAttendee = function () {
+        console.log("attendee.js says: saveAttendeeDemoByPiId() -> updateAttendee()");
 
-    var updateAttendee = function (attendee) {
-        // console.log("attendee.js, attendee:", attendee);
-        return Attendee.getAttendeeByBadgeId(badgeId)
-            .then(function (response) {
-                if (!response) {
-                    attendeeData = {
-                        badgeNumber: attendee.StoredUID,
-                        firstName: attendee.Firstname,
-                        lastName: attendee.Lastname,
-                        email: attendee.Email,
-                        phone: attendee.Phone1,
-                        title: attendee.Tile,
-                        company: attendee.Company
+        /* If no attendee object is passed to this function, create a new attendee */
+        if (!attendee) {
+            console.log("attendee.js says: saveAttendeeDemoByPiId() - updateAttendee() - Creating New Attendee Object");
+
+            return Session.authorizeRfid({NDefRecord: attendeeEcryptedId})
+                .then(function (badgeInfo) {
+                    attendeeInfo = badgeInfo.BadgeData;
+                    badgeId = attendeeInfo.StoredUID;
+
+                    var attendeeData = {
+                        badgeNumber: attendeeInfo.StoredUID,
+                        firstName: attendeeInfo.Firstname,
+                        lastName: attendeeInfo.Lastname,
+                        email: attendeeInfo.Email,
+                        phone: attendeeInfo.Phone1,
+                        title: attendeeInfo.Tile,
+                        company: attendeeInfo.Company
                     }
-
+        
                     var registrationStatus = {
                         scanned: 'true',
                         terms: 'false',
@@ -333,18 +326,22 @@ var saveAttendeeDemoByPiId = function (req, res) {
                     attendeeData.pointsCount = 0;
                     attendeeData.redemptions = [];
                     attendeeData.extraQuestionnaire = 'false';
-
+        
                     return Attendee.postAttendee(attendeeData);
-                } else {
-                    return attendee;
-                }
+                })
+                .catch(function (error) {
+                    throw error;
+                });
+        } else {
+            badgeId = attendee.badgeNumber;
+            return Attendee.getAttendeeByBadgeId(attendee.badgeNumber);
+        }
 
-            });
     };
 
     /* Create or Update the demoStation */
     var postDemoStation = function () {
-        console.log("postDemoStation");
+        console.log("attendee.js says: saveAttendeeDemoByPiId() - postDemoStation() - Creating / Editing DemoStation");
         
         return DemoStation.postDemoStation({piId: piId})
             .then(function (demoStation) {
@@ -356,28 +353,19 @@ var saveAttendeeDemoByPiId = function (req, res) {
     };
 
     /* Save demo details in Attendee's profile */
-    // var postAttendeeDemo = function (demo) {
+    var postAttendeeDemo = function (demoStation) {
 
-    //     if (!demo || !demo._id) 
-    //         console.log("no demo");
-    // }; 
-
-    /* Save demo details in Attendee's profile */
-    var postAttendeeDemo = function (demo) {
-        
-        if (!demo || !demo._id) {
-            // console.log("no demo");
+        if (!demoStation || !demoStation._id) {
+            throw 'attendee.js says: Something went wrong in postAttendeeDemo()';
         }
 
         var attendeeDemoObj = {
             badgeId: badgeId,
-            demo: demo
+            demo: demoStation.demo
         };
         
         return Attendee.postAttendeeDemo(attendeeDemoObj)
             .then(function (response) {
-                // console.log("In attendee.js");
-                // console.log(response);
                 return response;
             })
             .catch(function (error) {
@@ -386,21 +374,9 @@ var saveAttendeeDemoByPiId = function (req, res) {
     };
 
     /* Chain together promises for final function call */
-    return getBadgeInfo()
-        .then(updateAttendee)
+    return updateAttendee()
         .then(postDemoStation)
-        .then(function (demo) {
-            if (demo) {
-                // console.log("attendeejs: ", demo);
-                return postAttendeeDemo(demo)
-                    .then(function () {
-                        console.log("Posting Attedee Demo");
-                        res.send(demo);
-                    });
-            } else {
-                res.send("No demo to post");
-            }
-        })
+        .then(postAttendeeDemo)
         .catch(function (error) {
             res.status(httpStatus.BAD_REQUEST);
             throw error;
@@ -515,6 +491,43 @@ var redeemPrize = function (req, res) {
 
 
 
+/**
+ * POST /api/attendee/badgeId/:badgeId/saveExitQuestionnaire
+ * Update Attendee's profile by appending info about Exit Questionnaire
+ **/
+var saveExitQuestionnaire = function (req, res) {
+    var badgeNumber = req.body.badgeId;
+    var exitQuestionnaireObj = req.body.exitQuestionnaireObj;
+    
+    /****************** Dummy values ******************/
+    exitQuestionnaireObj = [
+        {
+            question_0: "This is question 0",
+            answer_0: "This is answer 0"
+        },
+        {
+            question_1: "This is question 1",
+            answer_1: "This is answer 1"
+        },
+        {
+            question_2: "This is question 2",
+            answer_2: "This is answer 2"
+        }
+    ];
+    /**************************************************/
+
+    return Attendee.postAttendeeExtraQuestionnaire(badgeNumber, exitQuestionnaireObj)
+        .then(function (response) {
+            return response;
+        })
+        .catch(function (error) {
+            throw error;
+        });
+};
+
+
+
+
 AttendeeExports = {
     attendees: attendees,
     attendeeById: attendeeById,
@@ -523,6 +536,7 @@ AttendeeExports = {
     saveAttendeeRegistrationStatus: saveAttendeeRegistrationStatus,
     saveAttendeeDemo: saveAttendeeDemo,
     saveAttendeeDemoByPiId: saveAttendeeDemoByPiId,
+    saveExitQuestionnaire: saveExitQuestionnaire,
     redeemPrize: redeemPrize
 };
 

@@ -36,15 +36,7 @@ router.route('/attendee/badgeId/:id').get(attendeeExports.attendeeByBadgeId);
 router.route('/attendee').post(attendeeExports.saveAttendee);
 router.route('/attendee/badgeId/:id/registrationStatus').post(attendeeExports.saveAttendeeRegistrationStatus);
 router.route('/attendee/badgeId/:badgeId/demo/:demoId').post(attendeeExports.saveAttendeeDemo);
-
-
-
-
-router.route('/attendee/logDemoByDemoStation').post(attendeeExports.saveAttendeeDemoByPiId);
-
-
-
-
+/**/ router.route('/attendee/logDemoByDemoStation').post(attendeeExports.saveAttendeeDemoByPiId); 
 router.route('/attendee/badgeId/:badgeId/redeemPrize/:prizeId').post(attendeeExports.redeemPrize);
 
 /* Session */

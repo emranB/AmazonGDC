@@ -115,15 +115,7 @@ var postAttendee = function (data) {
 
 
 var postAttendeeRegistrationStatus = function (attendeeObj) {
-
-    console.log("------------------------------------------------------------------------------")
-    console.log("------------------------------------------------------------------------------")
-    console.log("In Attendee.js postAttendeeRegistrationStatus");
-    console.log(attendeeObj);
-    console.log("------------------------------------------------------------------------------")
-    console.log("------------------------------------------------------------------------------")
-
-
+    
     /* Retrieve and appropriately format data */
     var parseAttendeeDetails = function () {
         return getAttendeeByBadgeId(attendeeObj.badgeNumber)
@@ -206,11 +198,6 @@ var postAttendeeRegistrationStatus = function (attendeeObj) {
             {upsert: false}
         )
         .then(function (response) {
-            // console.log("------------------------------------------------------------------------");
-            // console.log("In Attendee.js postAttendeeRegistrationStatus");
-            // console.log(response);
-            // console.log("------------------------------------------------------------------------");
-            // console.log("------------------------------------------------------------------------");
             return response;
         })
         .catch(function (error) {
@@ -229,20 +216,14 @@ var postAttendeeRegistrationStatus = function (attendeeObj) {
 
 
 var postAttendeeDemo = function (data) {
-    var badgeId = data.badgeId;
-    var demo = data.demo;
 
-    if (!demo) {
-        demo = {};
-    }
+    var badgeId = data.badgeId;
+    var dataDemo = data.demo;
 
     /* Get a list of IDs of Demos that have already been viewed by Attendee */
     var getAttendeeDemoViews = function () {
         return getAttendeeByBadgeId(badgeId)
             .then(function (attendee) {
-                if (!attendee.demos) {
-                    attendee.demos = [];
-                }
                 return attendee.demos;
             })
             .catch(function (error) {
@@ -250,165 +231,192 @@ var postAttendeeDemo = function (data) {
             });
     };
 
-    /* Update Demo views by Attendee */
+    /** 
+     * Update Demo views by Attendee 
+     * CASE 1: Has dataDemo
+     *     CASE 1.A: Attendee Has viewedDemos
+     *         CASE 1.A.i: dataDemo requires Check Out
+     *             CASE 1.A.i.a: dataDemo has occurred in viewedDemos
+     *                            - Set dataDemo.checkedIn = true
+     *                            - Set dataDemo.checkedOut = true
+     *                 CASE 1.A.i.a.1: Last occurance of dataDemo in viewedDemos was Checked Out
+     *                                  - Push dataDemo into Attendee object
+     *                 CASE 1.A.i.a.2: Last occurance of dataDemo in viewedDemos was NOT Checked Out
+     *                     CASE 1.A.i.a.2.A: dataDemo is the last element in viewedDemos
+     *                                        - Push dataDemo into Attendee object              
+     *                                        - Increment attendee.pointAccumulated             
+     *                                        - Increment attendee.pointsCount
+     *                     CASE 1.A.i.a.2.A: dataDemo is NOT the last element in viewedDemos
+     *                                        - Set dataDemo.checkedIn = true
+     *                                        - Set dataDemo.checkedOut = false
+     *                                        - Push dataDemo into Attendee object              
+     *              CASE 1.A.i.b: dataDemo has NOT occurred in viewedDemos
+     *                                          - Set dataDemo.checkedIn = true
+     *                                          - Set dataDemo.checkedOut = false
+     *                                          - Push dataDemo into Attendee object
+     *          CASE 1.A.ii: dataDemo does NOT require Check Out
+     *              CASE 1.A.ii.1: dataDemo has occurred in viewedDemos
+     *                              - Push dataDemo into Attendee object  
+     *              CASE 1.A.ii.2: dataDemo has NOT occurred in viewedDemos
+     *                              - Push dataDemo into Attendee object    
+     *                              - Increment attendee.pointAccumulated             
+     *                              - Increment attendee.pointsCount          
+     *      CASE 1.B: Attendee does NOT have any viewedDemos
+     *          CASE 1.B.i: dataDemo requires Check Out
+     *                          - Set dataDemo.checkedIn = true
+     *                          - Set dataDemo.checkedOut = false
+     *                          - Push dataDemo into Attendee object
+     *          CASE 1.B.ii: dataDemo does NOT require Check Out
+     *                          - Push dataDemo into Attendee object              
+     *                          - Increment attendee.pointAccumulated             
+     *                          - Increment attendee.pointsCount 
+     * return dataDemo   
+     * 
+     * CASE 2: Does not have dataDemo
+     *      - Redirect to screen saying "A Demo has not been assigned to this Station yet"      
+     **/
     var updateAttendeeDemoViews = function (viewedDemos) {
-        demo = JSON.parse(JSON.stringify(demo));
 
-        var viewedDemoIds = [];
-
-        // data = badgeId + demo
-        // console.log("------------------------------------------------------- ");
-        // console.log("----------- Viewed Demos------------- ");
-        // console.log(viewedDemos);
-        // console.log("------------------------------------------------------- ");
-        
-        // !demo._id
-        if (!demo || !demo._id) {
+        /* CASE 2 - from algorithm above */
+        if (!dataDemo || !dataDemo._id) {
             return Attendee.getAttendeeByBadgeId(badgeId)
                 .then(function (attendee) {
+                    console.log("Attendee.js says: updateAttendeeDemoViews() -> No demo in demo station, so returning attendee");
                     return attendee;
                 });
         }
 
-        if (!viewedDemos.length) {
-            // return data.demo;
-        }
-        else {
-            console.log("Has viewed demos");
+        /* CASE 1 - from algorithm above */
+        if (viewedDemos && viewedDemos.length) { /* If Attendee has some viewed Demos */
+                            
             var viewedDemoIds = viewedDemos.map(function (viewedDemo) {
                 return viewedDemo._id;
             });
-            var viewingDemoId = demo._id;
-        }
-        
 
-        console.log("Last demo occurs");
-        var lastDemoOccurance = JSON.parse(JSON.stringify(viewedDemos));
-        lastDemoOccurance = lastDemoOccurance.reverse().find(function (row) {
-            return row._id = demo._id;
-        });
-        // console.log(lastDemoOccurance);
+            if (dataDemo.requireCheckout == "true") {
+                if (viewedDemoIds.indexOf(dataDemo._id) != -1) { /* If dataDemo has occurred in viewedDemos */  
+                        
+                    dataDemo.checkedIn = "true";
+                    dataDemo.checkedOut = "true";
 
+                    /* Getting the last logged Demo object for Attendee that matches dataDemo ID */
+                    var attendeeLastDataDemoOccurance = JSON.parse(JSON.stringify(viewedDemos));
+                    attendeeLastDataDemoOccurance = attendeeLastDataDemoOccurance.reverse().find(function (row) {
+                        return row._id = dataDemo._id;
+                    });
 
-
-        demo.timeStamp = Date.now();
-        /********************************************************************************************************************** 
-         ** - Check if demo has "requireCheckout"
-         **         IF demo has "requireCheckout"
-         **             - Check if demo doesn't exist in Attendee Object
-         **                 IF demo doesn't exist in Attendee Object
-         **                     - Initiate demo object with new "checkedIn='true'" and "checkedOut='false'" fields
-         **                     - Push demo into Attendee object
-         **                       (DO NOT increment points here)
-         **                 ELSE IF demo exists in Attendee Object
-         **                     - Check if this Demo ID matches the ID of the last demo in the Attendee object
-         **                         IF Demo IDs match
-         **                             - Initiate current demo object with "checkedIn='true'" and "checkedOut='true'"
-         **                             - Check if the last Demo in the Attendee object has "checkedOut='true'"
-         **                                 IF the last Attendee object demo has "checkedOut='true'"
-         **                                     - Push demo into Attendee object
-         **                                 ELSE IF the last Attendee object demo has "checkedOut='false'"
-         **                                     - Increment Attendee 'pointsCount' and 'pointsAccumulated'
-         **                                     - Push demo into Attendee object
-         **                         ELSE IF Demo IDs don't match 
-         **                             - Initiate current demo object with "checkedIn='true'" and "checkedOut='false'"
-         **                             - Push demo into Attendee object
-         **********************************************************************************************************************/
-        // && lastDemoOccurance.timeStamp >= (Date.now() + 5000)
-        if (demo.requireCheckout == "true") {
-            if (viewedDemoIds.indexOf(viewingDemoId) == -1) {   
-                demo.checkedIn = "true";
-                demo.checkedOut = "false";                     
-
-                return AttendeeModel.findOneAndUpdate(
-                    {badgeNumber: badgeId},
-                    {
-                        $push: {
-                            demos: demo
-                        }
-                    },
-                    {new: true}
-                ).exec();
-            } else {      
-                
-                var lastViewedDemo = viewedDemos[viewedDemos.length - 1];
-                var lastViewedDemoId = viewedDemoIds[viewedDemoIds.length - 1];     
-                var okTime = Date.now() + 25000;
-                
-                if ((viewingDemoId == lastViewedDemoId) && (okTime > lastViewedDemo.timeStamp)) {  
-                    console.log("setting to truie");   
+                    /* Getting the last logged demo object for Attendee */
+                    var attendeeLastViewedDemo = viewedDemos[viewedDemos.length - 1];
                     
-                    demo.checkedIn = "true";
-                    demo.checkedOut = "true";
-
-                    if (lastViewedDemo.checkedOut == "true") {                    
+                    if (attendeeLastDataDemoOccurance.checkedOut == "true") { /* Last occurance of dataDemo in viewedDemos was Checked Out */                   
                         return AttendeeModel.findOneAndUpdate(                                
                             {badgeNumber: badgeId},
                             {
                                 $push: {
-                                    demos: demo
+                                    demos: dataDemo
                                 }
                             },
                             {new: true}
                         ).exec();
                     } else {
-                        return AttendeeModel.findOneAndUpdate(
-                            {badgeNumber: badgeId},
-                            {
-                                $push: {
-                                    demos: demo
+                        if (attendeeLastDataDemoOccurance._id == attendeeLastViewedDemo._id) { /* If dataDemo is the last element in viewedDemos */
+                            return AttendeeModel.findOneAndUpdate(
+                                {badgeNumber: badgeId},
+                                {
+                                    $push: {
+                                        demos: dataDemo
+                                    },
+                                    $inc: {
+                                        pointsCount: dataDemo.points,
+                                        pointsAccumulated: dataDemo.points
+                                    }
                                 },
-                                $inc: {
-                                    pointsCount: demo.points,
-                                    pointsAccumulated: demo.points
-                                }
-                            },
-                            {new: true}
-                        ).exec();
+                                {new: true}
+                            ).exec();
+                        } else {
+                            dataDemo.checkedIn = "true";
+                            dataDemo.checkedOut = "false";                    
+                            return AttendeeModel.findOneAndUpdate(                                
+                                {badgeNumber: badgeId},
+                                {
+                                    $push: {
+                                        demos: dataDemo
+                                    }
+                                },
+                                {new: true}
+                            ).exec();
+                        }
                     }
-                } else {
-                    demo.checkedIn = "true";
-                    demo.checkedOut = "false";  
-
+                } else { /* If dataDemo has NOT occurred in viewedDemos */
+                    dataDemo.checkedIn = "true";
+                    dataDemo.checkedOut = "false";                    
+                    return AttendeeModel.findOneAndUpdate(                                
+                        {badgeNumber: badgeId},
+                        {
+                            $push: {
+                                demos: dataDemo
+                            }
+                        },
+                        {new: true}
+                    ).exec();
+                }
+            } else { /* If dataDemo does NOT require Check Out */
+                if (viewedDemoIds.indexOf(dataDemo._id) != -1) { /* If dataDemo has occurred in viewedDemos */                    
+                    return AttendeeModel.findOneAndUpdate(                                
+                        {badgeNumber: badgeId},
+                        {
+                            $push: {
+                                demos: dataDemo
+                            }
+                        },
+                        {new: true}
+                    ).exec();
+                } else { /* If dataDemo has NOT occurred in viewedDemos */ 
                     return AttendeeModel.findOneAndUpdate(
                         {badgeNumber: badgeId},
                         {
                             $push: {
-                                demos: demo
+                                demos: dataDemo
+                            },
+                            $inc: {
+                                pointsCount: dataDemo.points,
+                                pointsAccumulated: dataDemo.points
                             }
                         },
                         {new: true}
                     ).exec();
                 }
             }
-        }
-        /************************************************************************** 
-         ** ELSE IF does not have "requireCheckout"
-         **     - Push Demo into Attendee object
-         **     - Increment Attendee's 'pointsCount' and 'pointsAccumulated'
-         **************************************************************************/
-        else {
-            return AttendeeModel.update(
-                {badgeNumber: badgeId},
-                {
-                    $push: {
-                        demos: demo
+        } else { /* If Attendee does NOT have any viewedDemos */
+            if (dataDemo.requireCheckout == "true") { /* If dataDemo requires Check Out */
+                dataDemo.checkedIn = "true";
+                dataDemo.checkedOut = "false";                    
+                return AttendeeModel.findOneAndUpdate(                                
+                    {badgeNumber: badgeId},
+                    {
+                        $push: {
+                            demos: dataDemo
+                        }
                     },
-                    $inc: {
-                        pointsCount: demo.points,
-                        pointsAccumulated: demo.points
-                    }
-                },
-                {new: true}
-            ).exec();
-            // .then(function (response) {
-            //     return response;
-            // })
-            // .catch(function (error) {
-            //     throw error;
-            // });
+                    {new: true}
+                ).exec();
+            } else { /* If dataDemo does NOT require Check Out */
+                return AttendeeModel.findOneAndUpdate(
+                    {badgeNumber: badgeId},
+                    {
+                        $push: {
+                            demos: dataDemo
+                        },
+                        $inc: {
+                            pointsCount: dataDemo.points,
+                            pointsAccumulated: dataDemo.points
+                        }
+                    },
+                    {new: true}
+                ).exec();
+            }
         }
-    };
+    }
 
     /* Chain promises together in final function calls */
     return getAttendeeDemoViews()
@@ -445,6 +453,16 @@ var postAttendeeRedemptions = function (badgeNumber, prizeInfo) {
 
 
 
+var postAttendeeExtraQuestionnaire = function (badgeNumber, questionnaireArray) {
+
+    console.log(badgeNumber, questionnaireArray);
+    
+
+};
+
+
+
+
 /**
  * Create Object with all member functions
  */
@@ -455,8 +473,8 @@ Attendee = {
     postAttendee: postAttendee,
     postAttendeeRegistrationStatus: postAttendeeRegistrationStatus,
     postAttendeeDemo: postAttendeeDemo,
-    postAttendeeRedemptions: postAttendeeRedemptions
-    // postAttendeeExtraQuestionnaire: postAttendeeExtraQuestionnaire
+    postAttendeeRedemptions: postAttendeeRedemptions,
+    postAttendeeExtraQuestionnaire: postAttendeeExtraQuestionnaire
 };
 
 

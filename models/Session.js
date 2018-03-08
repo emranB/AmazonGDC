@@ -34,14 +34,24 @@ var UserSchema = new Schema({
 var UserModel = mongoose.model('UserModel', UserSchema);
 
 
+
+/** 
+ * Get Badge Data from ITN API using an Attendee's base-64 identifier 
+ **/
 var authorizeRfid = function (request) {
 
-    var NdefRec = request.NDefRecord;
+    var NDefRec = request.NDefRecord;
+    
+    /**
+     * NOTE:
+     *  The ITN API expects KEY for for base-64 string to be passed as
+     *  - NdefRecord (<- lower case 'd')
+     */
     var params = {
         ActivationCode: "4186598",
         AuthKey: "CurrentStudios_1",
         DeviceIdentifier: "Test",
-        NDefRecord: NdefRec
+        NdefRecord: NDefRec
     };
     var ApiUrl = "https://mobile.bcard.net/Services/BadgeDataService/BadgeDataService.svc/GetBadgeData";
 
@@ -54,7 +64,6 @@ var authorizeRfid = function (request) {
 
     return requestPromise(postRequest)
         .then(function (data) {
-            //console.log("GOT ITN DATA", data);
             return data;
         })
         .catch(function (error) {
@@ -63,6 +72,10 @@ var authorizeRfid = function (request) {
 };
 
 
+
+/** 
+ * Authorize an admin for CMS login 
+ **/
 var authorizeUser = function (request) {
     var username = request.username;
     var password = request.password;
@@ -77,6 +90,8 @@ var authorizeUser = function (request) {
         throw error;
     });
 };
+
+
 
 
 Session = {
