@@ -28,10 +28,12 @@ var AttendeeSchema = new Schema({
     registrationStatus: Object,
     questionnaire: Object,
     demos: Object,
+    recommendedDemos: Object,
     pointsAccumulated: Number,
     pointsCount: Number,
     redemptions: Object,
-    extraQuestionnaire: String
+    extraQuestionnaire: String,
+    creationTime: String
 }, 
 {
     collection: 'attendee',
@@ -281,7 +283,7 @@ var postAttendeeDemo = function (data) {
         if (!dataDemo || !dataDemo._id) {
             return Attendee.getAttendeeByBadgeId(badgeId)
                 .then(function (attendee) {
-                    console.log("Attendee.js says: updateAttendeeDemoViews() -> No demo in demo station, so returning attendee");
+                    console.log("Attendee.js says: postAttendeeDemo() - updateAttendeeDemoViews() -> No demo in demo station, so returning attendee");
                     return attendee;
                 });
         }
@@ -456,10 +458,20 @@ var postAttendeeRedemptions = function (badgeNumber, prizeInfo) {
 var postAttendeeExtraQuestionnaire = function (badgeNumber, questionnaireArray) {
 
     console.log(badgeNumber, questionnaireArray);
-    
+
 
 };
 
+
+
+var deleteByBadgeId = function (badgeId) {
+    return AttendeeModel.remove(
+        {badgeNumber: badgeId},
+        function (err, data) {
+            return data;
+        }
+    ).exec();
+};
 
 
 
@@ -474,7 +486,8 @@ Attendee = {
     postAttendeeRegistrationStatus: postAttendeeRegistrationStatus,
     postAttendeeDemo: postAttendeeDemo,
     postAttendeeRedemptions: postAttendeeRedemptions,
-    postAttendeeExtraQuestionnaire: postAttendeeExtraQuestionnaire
+    postAttendeeExtraQuestionnaire: postAttendeeExtraQuestionnaire,
+    deleteByBadgeId: deleteByBadgeId
 };
 
 

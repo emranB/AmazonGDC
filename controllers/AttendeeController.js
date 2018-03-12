@@ -108,9 +108,20 @@
             return $http.post("/api/session/authorize/rfid", params)
                 .then(function (response) {
                     console.log(response);
+                    return response;
                 });
         };
-        // $scope.registerNewAttendee();
+
+        
+        /* Delete an Attendee */
+        $scope.deleteAttendee = function (badgeId) {
+            if (confirm("Are you sure you want to delete this record?")) {
+                return $http.delete("/api/attendee/badgeId/" + badgeId)
+                    .then(function (data) {
+                        $state.go("attendees", {reload: true});
+                    });
+            }
+        };
 
         
         /* Logout User */
@@ -122,6 +133,7 @@
                     });
             }
         };
+
     
         
     }]);

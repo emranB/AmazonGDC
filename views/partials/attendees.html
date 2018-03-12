@@ -31,6 +31,11 @@
                     </a>
                     <div ng-show="showExtended" class="tile" ng-repeat="item in attendees track by item._id">
                         <div class="title font-6"> {{item.firstName}} {{item.lastName}} </div>
+
+                        <div class="row description padded font-1">
+                            <button ng-click="deleteAttendee(item.badgeNumber)" class="ghost-button-1"> Delete Attendee </button>
+                        </div>
+
                         <hr>
                         <div class="row description padded font-1">
                             <div class="col-2"> Email: </div>
@@ -47,6 +52,26 @@
                         <div class="row description padded font-1">
                             <div class="col-2"> Badge Number: </div>
                             <div class="col-10"> {{item.badgeNumber}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Company: </div>
+                            <div class="col-10"> {{item.company}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Job Title: </div>
+                            <div class="col-10"> {{item.title}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Recommended Demos: </div>
+                            <div class="col-10">
+                                <ul>
+                                    <li class="row description padded font-1" ng-repeat="recommendedDemo in item.recommendedDemos">
+                                        <div class="col-4"> {{recommendedDemo._id}} </div>
+                                        <div class="col-4"> {{recommendedDemo.title}} </div>
+                                        <div class="col-4"> {{recommendedDemo.points}} </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="row description padded font-1">
                             <div class="col-2"> Points Available: </div>

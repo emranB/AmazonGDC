@@ -22,6 +22,7 @@
             title: '',
             description: []
         };
+        $scope.editingDemo = false;
     
         $scope.pageOptions = [
             {
@@ -110,6 +111,7 @@
                 });
         };
     
+
         /* Function fired on Page Load */
         var loadPage = function () {
             var demoStationId = $stateParams.demoStationId;
@@ -126,6 +128,7 @@
         };
         loadPage();
 
+
         /* Create a new Demo Station */
         $scope.submitNewDemoStation = function (piId, demo) {
             var demoStation = {
@@ -139,6 +142,21 @@
         };
 
 
+        /* Edit a Demo Station by Pi ID */
+        $scope.editDemoStation = function (piId, demo) {
+            var params = {
+                piId: piId,
+                demo: demo
+            };
+
+            if (confirm("Are you sure you want edit this Demo Station?")) {
+                return $http.post("/api/demoStation", params)
+                    .then(getAllDemoStations);
+            }
+        };
+
+
+        /* Logout User */
         $scope.logout = function () {
             if (confirm("Are you sure you want logout?")) {
                 return $http.get("/api/logout")

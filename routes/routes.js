@@ -38,6 +38,7 @@ router.route('/attendee/badgeId/:id/registrationStatus').post(attendeeExports.sa
 router.route('/attendee/badgeId/:badgeId/demo/:demoId').post(attendeeExports.saveAttendeeDemo);
 /**/ router.route('/attendee/logDemoByDemoStation').post(attendeeExports.saveAttendeeDemoByPiId); 
 router.route('/attendee/badgeId/:badgeId/redeemPrize/:prizeId').post(attendeeExports.redeemPrize);
+router.route('/attendee/badgeId/:badgeId').delete(attendeeExports.deleteAttendeeByBadgeId);
 
 /* Session */
 router.route('/session').post(sessionExports.authorizeUser);

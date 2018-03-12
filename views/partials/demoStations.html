@@ -27,11 +27,21 @@
                     <div class="description padded font-1"> Affiliated Demo:  </div>
                     <div class="title font-6"> {{item.demo.title || "(no demo)"}}  </div>
                     <hr>
+                    <div class="description padded font-1"> Pi ID: {{item.piId}} </div>
                     <div class="description padded font-1"> {{item.demo.description}} </div>
                 </a>
+
                 <div class="tile" ng-show="showExtended" ng-repeat="item in demoStations"> 
                     <div class="description padded font-1"> Affiliated Demo: </div>
                     <div class="title font-6"> {{item.demo.title || "(no demo)"}}  </div>
+
+                    <div class="description padded font-1">
+                        <button ng-hide="editingDemo" class="ghost-button-1" ng-click="editingDemo = true;"> Edit Station </button>
+                        <button ng-show="editingDemo" class="ghost-button-1" ng-click="editDemoStation(item.piId, affiliatedDemo); editingDemo = false;"> Save Changes </button>
+                        <button ng-show="editingDemo" class="ghost-button-1" ng-click="editingDemo = false;"> Cancel </button>
+                    </div>
+                    
+
                     <hr>
                     <div class="row description padded font-1">
                         <div class="col-2"> Demo Station PI ID: </div>
@@ -41,26 +51,45 @@
                         <div class="col-2"> Demo Station ID: </div>
                         <div class="col-10"> {{item._id || ""}} </div>
                     </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Demo ID: </div>
-                        <div class="col-10"> {{item.demo._id || ""}} </div>
+
+                    <div ng-hide="editingDemo">
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Demo ID: </div>
+                            <div class="col-10"> {{item.demo._id || ""}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Demo Title: </div>
+                            <div class="col-10"> {{item.demo.title || ""}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Demo Team: </div>
+                            <div class="col-10"> {{item.demo.team || ""}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Demo Category: </div>
+                            <div class="col-10"> {{item.demo.team || ""}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Demo Description </div>
+                            <div class="col-10"> {{item.demo.description || ""}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Require Checkout </div>
+                            <div class="col-10"> {{item.demo.requireCheckout || ""}} </div>
+                        </div>
                     </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Demo Team: </div>
-                        <div class="col-10"> {{item.demo.team || ""}} </div>
+
+                    <div ng-show="editingDemo">
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Select Demo </div>
+                            <div class="col-10"> 
+                                <select ng-model="affiliatedDemo" name="affiliatedDemo" id="affiliatedDemo" ng-options="demo.title for demo in demos">
+                                    <option value="" disabled>Select One</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Demo Category: </div>
-                        <div class="col-10"> {{item.demo.team || ""}} </div>
-                    </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Demo Description </div>
-                        <div class="col-10"> {{item.demo.description || ""}} </div>
-                    </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Require Checkout </div>
-                        <div class="col-10"> {{item.demo.requireCheckout || ""}} </div>
-                    </div>
+                        
                 </div>
             </div>
 
