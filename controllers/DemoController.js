@@ -96,6 +96,15 @@ function (
     loadPage();
 
 
+    $scope.deleteDemo = function (demoId) {
+        return $http.delete("/api/demo/" + demoId)
+            .then(function (response) {
+                $scope.showDemos = false;
+                $state.go("demos");
+            });
+    };
+
+
     $scope.logout = function () {
         if (confirm("Are you sure you want logout?")) {
             return $http.get("/api/logout")

@@ -14,6 +14,7 @@ router.route('/demos').get(demoExports.allDemos);
 router.route('/demo/id/:_id').get(demoExports.demoById);
 router.route('/demo/title/:title').get(demoExports.demoByTitle);
 router.route('/demo').post(demoExports.saveDemo);
+router.route('/demo/:id').delete(demoExports.deleteDemoById);
 
 /* Demo Stations */
 router.route('/demoStations').get(demoStationExports.allDemoStations);
@@ -35,9 +36,13 @@ router.route('/attendee/id/:id').get(attendeeExports.attendeeById);
 router.route('/attendee/badgeId/:id').get(attendeeExports.attendeeByBadgeId);
 router.route('/attendee').post(attendeeExports.saveAttendee);
 router.route('/attendee/badgeId/:id/registrationStatus').post(attendeeExports.saveAttendeeRegistrationStatus);
+router.route('/attendee/badgeId/:id/extraQuestionnaire').post(attendeeExports.saveAttendeeExtraQuestionnaire);
 router.route('/attendee/badgeId/:badgeId/demo/:demoId').post(attendeeExports.saveAttendeeDemo);
 /**/ router.route('/attendee/logDemoByDemoStation').post(attendeeExports.saveAttendeeDemoByPiId); 
 router.route('/attendee/badgeId/:badgeId/redeemPrize/:prizeId').post(attendeeExports.redeemPrize);
+router.route('/attendee/flagAttendeeHasSeenRegistrationRequest').post(attendeeExports.flagAttendeeHasSeenRegistrationRequest);
+
+
 router.route('/attendee/badgeId/:badgeId').delete(attendeeExports.deleteAttendeeByBadgeId);
 
 /* Session */

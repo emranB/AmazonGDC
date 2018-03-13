@@ -35,6 +35,7 @@
                 </a>
                 <div ng-show="showExtended" class="tile" ng-repeat="item in demos">
                     <div class="title font-6"> {{item.title}}  </div>
+                    <button class="ghost-button-1" ng-click="deleteDemo(item._id)"> Delete Demo </button>
                     <hr>
                     <div class="row description padded font-1">
                         <div class="col-2"> Index / Spot: </div>

@@ -85,12 +85,32 @@ var saveDemo = function (req, res) {
 
 
 
+/**
+ * DELETE /api/demo
+ * Delete a Demo by its ID
+ **/
+var deleteDemoById = function (req, res) {
+    var demoId = req.params.id;
+
+    return Demo.deleteDemo(demoId)
+        .then(function (data) {
+            res.status(httpStatus.OK).send(data);
+        })
+        .catch(function (error) {
+            res.status(httpStatus.BAD_REQUEST);
+            throw error;
+        });
+};
+
+
+
 
 DemoExports = {
     allDemos: allDemos,
     demoById: demoById,
     demoByTitle: demoByTitle,
-    saveDemo: saveDemo
+    saveDemo: saveDemo,
+    deleteDemoById: deleteDemoById
 }
 
 module.exports = DemoExports;

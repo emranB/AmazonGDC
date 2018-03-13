@@ -80,6 +80,12 @@ var postDemo = function (data) {
         });
 };
 
+var deleteDemo = function (id) {
+    return DemoModel.findOneAndRemove(
+        {_id: id}
+    ).exec();
+};
+
 
 /**
  * Create Object with all member functions
@@ -88,7 +94,8 @@ Demo = {
     getAllDemos: getAllDemos,
     getDemoById: getDemoById,
     getDemoByTitle: getDemoByTitle,
-    postDemo: postDemo
+    postDemo: postDemo,
+    deleteDemo: deleteDemo
 };
 
 

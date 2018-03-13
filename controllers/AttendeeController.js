@@ -134,6 +134,13 @@
             }
         };
 
+
+
+        return $http.post("/api/attendee/badgeId/8046701A0F4704/extraQuestionnaire")
+            .then(function (data) {
+                console.log(data.data);
+            });
+
     
         
     }]);
