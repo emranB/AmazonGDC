@@ -10,6 +10,7 @@ var sessionExports = require('../API/session');
 
 /* Demos */
 router.route('/demos').get(demoExports.allDemos);
+router.route('/demo/getDemoBySpotNumber/:demoSpotNumber').get(demoExports.demoBySpotNumber);
 // router.route('/demos/attendeeBadgeId/:badgeId').get(demoExports.getDemosByAttendeeBadgeId);
 router.route('/demo/id/:_id').get(demoExports.demoById);
 router.route('/demo/title/:title').get(demoExports.demoByTitle);

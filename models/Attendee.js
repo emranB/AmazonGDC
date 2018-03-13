@@ -560,7 +560,14 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
         "Producer":             "PR",
         "QA Tester":            "QA",
         "Studio Manager":       "SM",
-        "Technical Artist":     "TA"
+        "Technical Artist":     "TA",
+
+
+        /* Dummy ValUES */
+        "Data Network Consultant":      "DN",
+        "Director Product Marketing":   "DP",
+        "Client Manager":               "CM",
+        "Senior Account Executive":     "SA"
     };
 
     /* Access 'interestsTags' using 'interestsTags[interest]' */
@@ -603,7 +610,15 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
         PR: [29],
         QA: [14,17,30],
         SM: [11,18,25,27,26,28,20,22,13,19,23,31,32],
-        TA: [5,6,7,8,19]
+        TA: [5,6,7,8,19],
+
+
+        
+        /* Dummy Values */
+        DN: [2,3,3,17],
+        DP: [1],
+        CM: [2,3,4,5,6,7,8,9,12],
+        SA: [16,22,30]
     };
     
     /* Table to get Demo Spot nubmer by Interest */

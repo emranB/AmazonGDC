@@ -66,6 +66,18 @@ var getDemoByTitle = function (name) {
         });
 };
 
+var getDemoBySpotNumber = function (demoSpotNumber) {
+    return DemoModel.findOne(
+        {index: demoSpotNumber}
+    )
+    .then(function (data) {
+        return data;
+    })
+    .catch(function (error) {
+        throw error;
+    });
+}; 
+
 var postDemo = function (data) {
     data = JSON.parse(data);
     data.id = id;
@@ -87,6 +99,7 @@ var deleteDemo = function (id) {
 };
 
 
+
 /**
  * Create Object with all member functions
  */
@@ -95,7 +108,8 @@ Demo = {
     getDemoById: getDemoById,
     getDemoByTitle: getDemoByTitle,
     postDemo: postDemo,
-    deleteDemo: deleteDemo
+    deleteDemo: deleteDemo,
+    getDemoBySpotNumber: getDemoBySpotNumber
 };
 
 

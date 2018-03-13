@@ -104,13 +104,31 @@ var deleteDemoById = function (req, res) {
 
 
 
+/**
+ * GET /api/demo/getDemoBySpotNumber/:demoSpotNumber
+ * Delete a Demo by its ID
+ **/
+var demoBySpotNumber = function (req, res) {
+    var demoSpotNumber = req.params.demoSpotNumber;
+
+    return Demo.getDemoBySpotNumber(demoSpotNumber)
+        .then(function (data) {
+            res.status(httpStatus.OK).send(data);
+        })
+        .catch(function (error) {
+            res.status(httpStatus.BAD_REQUEST);
+            throw error;
+        });
+};
+
 
 DemoExports = {
     allDemos: allDemos,
     demoById: demoById,
     demoByTitle: demoByTitle,
     saveDemo: saveDemo,
-    deleteDemoById: deleteDemoById
+    deleteDemoById: deleteDemoById,
+    demoBySpotNumber: demoBySpotNumber
 }
 
 module.exports = DemoExports;
