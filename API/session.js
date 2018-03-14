@@ -43,6 +43,22 @@ var authorizeUser = function (req, res) {
 
 
 /**
+ * POST /api/session/createUser
+ * Create a New User
+ **/
+var createUser = function (req, res) {
+    return Session.createUser(req.body)
+        .then(function (data) {
+            res.redirect('/login');
+        })
+        .catch(function (error) {
+            res.status(httpStatus.BAD_REQUEST);
+            throw error;
+        });
+};
+
+
+/**
  * GET /api/session
  * Get User in current session
  **/
@@ -66,7 +82,8 @@ SessionExports = {
     authorizeUser: authorizeUser,
     authorizeUserByRfid: authorizeUserByRfid,
     getSession: getSession,
-    destroySession: destroySession
+    destroySession: destroySession,
+    createUser: createUser
 };
 
 module.exports = SessionExports;

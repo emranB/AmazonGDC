@@ -613,7 +613,7 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
         TA: [5,6,7,8,19],
 
 
-        
+
         /* Dummy Values */
         DN: [2,3,3,17],
         DP: [1],
@@ -788,9 +788,9 @@ var getDemoWeights = function (demos) {
         "21"    :   "1-5",
         "31"    :   "1-4",
         "30"    :   "1-4",
-        "1"     :   "0-0",
-        "2A"    :   "0-0",
-        "2B"    :   "0-0",
+        "1"     :   "1-4",
+        "2A"    :   "1-4",
+        "2B"    :   "1-4",
         "3"     :   "0-0",
         "16"    :   "4-9",
         "15"    :   "6-9",

@@ -48,6 +48,7 @@ router.route('/attendee/badgeId/:badgeId').delete(attendeeExports.deleteAttendee
 
 /* Session */
 router.route('/session').post(sessionExports.authorizeUser);
+router.route('/session/createUser').post(sessionExports.createUser);
 router.route('/session').get(sessionExports.getSession);
 router.route('/session/authorize/rfid').post(sessionExports.authorizeUserByRfid);
 router.route('/logout').get(sessionExports.destroySession);

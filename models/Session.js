@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 var uri = 'mongodb://localhost:27017/amazon_gdc';
 var connection = mongoose.connect(uri);
 var requestPromise = require('request-promise');
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 /**
  * Define Schema
@@ -81,10 +83,16 @@ var authorizeUser = function (request) {
     var password = request.password;
 
     return UserModel.findOne({
-        "username": username,
-        "password": password
+        "username": username
     }).then(function (data) {
-        return data;
+        if (!data) {
+            throw "User does not exist";
+        }
+        var hash = data.password;
+        return bcrypt.compare(password, hash)
+            .then(function (response) {
+                return response;
+            });
     })
     .catch(function (error) {
         throw error;
@@ -93,10 +101,45 @@ var authorizeUser = function (request) {
 
 
 
+/**
+ * Create a new Admin for CMS
+ **/
+var createUser = function (userData) {
+    var username = userData.username;
+    var password = userData.password;
+    var repeat_password = userData.repeat_password;
+
+    if (!username || !password || !repeat_password)
+        throw "Error missing information";
+
+    if (password != repeat_password)
+        throw "Passwords don't match";
+        
+    return bcrypt.hash(password, saltRounds)
+        .then(function (hash) {
+            return UserModel.findOneAndUpdate(
+                {username: username},
+                {
+                    $set: {
+                        password: hash
+                    }
+                },
+                {upsert: true, new: true}
+            ).exec();
+        })
+        .catch(function (error) {
+            throw "Error: Can't Create New User";
+        });
+
+}; 
+
+
+
 
 Session = {
     authorizeUser: authorizeUser,
-    authorizeRfid: authorizeRfid
+    authorizeRfid: authorizeRfid,
+    createUser: createUser
 };
 
 module.exports = Session;
