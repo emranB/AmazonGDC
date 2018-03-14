@@ -18,7 +18,8 @@ var DemoSchema = new Schema({
         required: true,
         auto: true,
     },
-    index: Number,
+    index: String,
+    // index: Number,
     title: String,
     points: Number,
     team: String,
@@ -80,16 +81,27 @@ var getDemoBySpotNumber = function (demoSpotNumber) {
 
 var postDemo = function (data) {
     data = JSON.parse(data);
-    data.id = id;
-    var demoData = new DemoModel(data);
+    
+    var demoData = data;
+    if (!demoData._id) {
+        demoData = new DemoModel(demoData);
+    }
 
-    return demoData.save()
-        .then(function (data) {
-            return data;
-        })
-        .catch(function (error) {
-            throw error;
-        });
+    return DemoModel.findOneAndUpdate(
+        {_id: demoData._id},
+        {
+            $set: {
+                index: demoData.index,
+                title: demoData.title,
+                points: demoData.points,
+                team: demoData.team,
+                category: demoData.category,
+                requireCheckout: demoData.requireCheckout,
+                description: demoData.description
+            }
+        },
+        {upsert: true, new: true}
+    ).exec();
 };
 
 var deleteDemo = function (id) {

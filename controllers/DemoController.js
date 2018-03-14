@@ -21,6 +21,7 @@ function (
         title: '',
         description: []
     };
+    $scope.editingDemo = false;
 
     $scope.pageOptions = [
         {
@@ -97,11 +98,13 @@ function (
 
 
     $scope.deleteDemo = function (demoId) {
-        return $http.delete("/api/demo/" + demoId)
-            .then(function (response) {
-                $scope.showDemos = false;
-                $state.go("demos");
-            });
+        if (confirm("Are you sure you want to delete this Demo?")) {
+            return $http.delete("/api/demo/" + demoId)
+                .then(function (response) {
+                    $scope.showDemos = false;
+                    $state.go("demos");
+                });
+        }
     };
 
 

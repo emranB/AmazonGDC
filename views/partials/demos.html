@@ -35,36 +35,106 @@
                 </a>
                 <div ng-show="showExtended" class="tile" ng-repeat="item in demos">
                     <div class="title font-6"> {{item.title}}  </div>
-                    <button class="ghost-button-1" ng-click="deleteDemo(item._id)"> Delete Demo </button>
+
+                    <button class="ghost-button-1" ng-hide="editingDemo" ng-click="editingDemo=true;"> Edit Demo </button>
+                    <button class="ghost-button-1" ng-hide="editingDemo" ng-click="deleteDemo(item._id)"> Delete Demo </button>
+
+                    <!-- <button class="ghost-button-1" ng-show="editingDemo" ng-click="editDemo(item._id)"> Save Demo </button>
+                    <button class="ghost-button-1" ng-show="editingDemo" ng-click="editingDemo=false;"> Cancel </button> -->
+
                     <hr>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Index / Spot: </div>
-                        <div class="col-10"> {{item.index}} </div>
+                    <div ng-hide="editingDemo">
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Index / Spot: </div>
+                            <div class="col-10"> {{item.index}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2">Demo ID:</div>
+                            <div class="col-10">{{item._id}}</div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Points: </div>
+                            <div class="col-10"> {{item.points}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Team Name: </div>
+                            <div class="col-10"> {{item.team}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Category: </div>
+                            <div class="col-10"> {{item.category}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Description: </div>
+                            <div class="col-10"> {{item.description}} </div>
+                        </div>
+                        <div class="row description padded font-1">
+                            <div class="col-2"> Require Checkout: </div>
+                            <div class="col-10"> {{item.requireCheckout == "true" ? "Yes" : "No"}} </div>
+                        </div>
                     </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2">Demo ID:</div>
-                        <div class="col-10">{{item._id}}</div>
+
+                    <div ng-show="editingDemo">
+                        <form action="/api/demo" method="POST">
+                            <div class="row field">
+                                <div class="col-4 font-5">Demo ID:</div>
+                                <div class="col-8 font-5">
+                                    <input type="text" name="_id" placeholder="Demo ID" ng-model="item._id" readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="row field">
+                                <div class="col-4 font-5">Demo Spot / Index:</div>
+                                <div class="col-8 font-5">
+                                    <input type="text" name="index" ng-model="item.index" />
+                                </div>
+                            </div>
+                            <div class="row field">
+                                <div class="col-4 font-5">Title:</div>
+                                <div class="col-8 font-5">
+                                    <input type="text" name="title" ng-model="item.title" />
+                                </div>
+                            </div>
+                            <div class="row field">
+                                <div class="col-4 font-5">Points:</div>
+                                <div class="col-8 font-5">
+                                    <input type="number" name="points" ng-model="item.points" />
+                                </div>
+                            </div>
+                            <div class="row field">
+                                <div class="col-4 font-5">Team Name:</div>
+                                <div class="col-8 font-5">
+                                    <input type="text" name="team" ng-model="item.team" />
+                                </div>
+                            </div>
+                            <div class="row field">
+                                <div class="col-4 font-5">Category:</div>
+                                <div class="col-8 font-5">
+                                    <input type="text" name="category" ng-model="item.category" />
+                                </div>
+                            </div>
+                            <div class="row field">
+                                <div class="col-4 font-5">Require Checkout:</div>
+                                <div class="col-8 font-5">
+                                    <select name="requireCheckout">
+                                        <option value="false" selected> No </option>
+                                        <option value="true"> Yes </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row field">
+                                <div class="col-4 font-5">Description:</div>
+                                <div class="col-8 font-5">
+                                    <textarea name="description" placeholder="describe the demo">{{item.description}}</textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row field">
+                                <input class="ghost-button-1 col-6" type="submit" ng-show="editingDemo" ng-click="editDemo(item._id)" value="Save"  style="text-align: center;"/>
+                                <input class="ghost-button-1 col-6" ng-show="editingDemo" ng-click="editingDemo=false;" value="Cancel"  style="text-align: center;"/>
+                            </div>
+                        </form>
                     </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Points: </div>
-                        <div class="col-10"> {{item.points}} </div>
-                    </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Team Name: </div>
-                        <div class="col-10"> {{item.team}} </div>
-                    </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Category: </div>
-                        <div class="col-10"> {{item.category}} </div>
-                    </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Description: </div>
-                        <div class="col-10"> {{item.description}} </div>
-                    </div>
-                    <div class="row description padded font-1">
-                        <div class="col-2"> Require Checkout: </div>
-                        <div class="col-10"> {{item.requireCheckout == "true" ? "Yes" : "No"}} </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -74,7 +144,7 @@
                     <div class="row field">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">Demo Spot / Index:</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 font-5">
-                            <input type="number" name="index" placeholder="spot #" value="" />
+                            <input type="text" name="index" placeholder="spot #" value="" />
                         </div>
                     </div>
                     <div class="row field">
@@ -118,15 +188,14 @@
                     </div>
                     <br>
                     <div class="row field">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <input class="full-width-size form-submit" type="submit" value="Submit">
-                        </div>
+                        <input class="full-width-size form-submit col-6" type="submit" value="Submit">
+                        <input class="full-width-size form-submit col-6" type="button" value="Cancel" style="text-align: center;" ng-click="showDemos=false; createDemo=false;">
                     </div>
                 </form>
             </div>
 
             <!-- IF Error messages -->
-            <div class="row errorMessageContainer" ng-show="errorMessage.show">
+            <div class="row errorMessageContainer" ng-show="errorMessage.show" ng-click="showDemos=false; createDemo=false; errorMessage.show=false;">
                 <div class="tile">
                     <div class="title font-6"> {{errorMessage.title}}  </div>
                     <hr>
