@@ -685,7 +685,7 @@ var deductPoints = function (req, res) {
     var badgeId = req.params.id;
     var points = req.body.points;
 
-    return Attedee.deductPoints(badgeId, points)
+    return Attendee.deductPoints(badgeId, points)
         .then(function (data) {
             res.send(data);
         })
