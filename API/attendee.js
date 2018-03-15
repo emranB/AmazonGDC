@@ -661,7 +661,7 @@ var addNote = function (req, res) {
     var badgeId = req.params.id;
     var note = req.body.note;
 
-    return Attedee.addNote(badgeId, note)
+    return Attendee.addNote(badgeId, note)
         .then(function (data) {
             res.send(data);
         })
