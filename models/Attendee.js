@@ -34,7 +34,8 @@ var AttendeeSchema = new Schema({
     redemptions: Object,
     extraQuestionnaire: Object,
     creationTime: String,
-    hasSeenRegistrationRequest: String
+    hasSeenRegistrationRequest: String,
+    tapEvents: Object
 }, 
 {
     collection: 'attendee',
@@ -492,6 +493,29 @@ var deleteByBadgeId = function (badgeId) {
 
 
 
+var logTapEvent = function (request) {
+    var attendee = request.attendee;
+    var demoStationObj = request.demoStationObj;
+    var timeStamp = request.timeStamp;
+
+    var obj = {
+        timeStamp: timeStamp,
+        demoStation: demoStationObj
+    };
+
+    return AttendeeModel.findOneAndUpdate(
+        {badgeNumber: attendee.badgeNumber},
+        {
+            $push: {
+                "tapEvents": obj
+            }
+        },
+        {upsert: false, new: true}
+    ).exec();
+};
+
+
+
 /**
  * Create Object with all member functions
  */
@@ -505,7 +529,8 @@ Attendee = {
     postAttendeeRedemptions: postAttendeeRedemptions,
     postAttendeeExtraQuestionnaire: postAttendeeExtraQuestionnaire,
     deleteByBadgeId: deleteByBadgeId,
-    flagAttendeeHasSeenRegistrationRequest: flagAttendeeHasSeenRegistrationRequest
+    flagAttendeeHasSeenRegistrationRequest: flagAttendeeHasSeenRegistrationRequest,
+    logTapEvent: logTapEvent
 };
 
 
@@ -537,10 +562,20 @@ function shuffle(a) {
 /* Get recommended demos for an Attendee, based on job title and interests */ 
 var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
 
+
+    /**
+     * Dummy Value
+     *********************/
+    jobTitle = "Animator";
+    /*********************/
+
     /* A list of all recommendable Demo Spots */
     var allRecommendableDemos = 
     [
-        5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32
+        '5','6','7','8','9','10','11','12',
+        '13','14','15','16','17','18','19',
+        '20','21','22','23','24','25','26',
+        '27','28','29','30','31','32'
     ];
 
     /* Access 'jobTag' using: 'jobTag[jobTitle]' */
@@ -596,52 +631,52 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
     /* Table to get Demo Spot nubmer by Job Title */
     var demoValByjobTitle = 
     {
-        AN: [6],
+        AN: ['6'],
         AE: [],
-        BD: [11,12,14,9,8,10,21,31,30,16,15,18,17,25,27,26,24,28,20,22,13,23,29,32],
-        BZ: [25,27,26,28,20,22,13,19,23],
-        CD: [11,6,28,19,23],
-        DE: [12,14,9,10,21,31,16,15,18,17,24,22,19,29,32],
-        ED: [5,30],
-        EX: [25,27,28,20,22,13,19,23],
-        FD: [11,14,5,6,7,8,10,21,31,30,24,28,19,32],
-        GD: [14,5,7,8,31,30,19,29,32],
-        LD: [5,7,8],
-        PR: [29],
-        QA: [14,17,30],
-        SM: [11,18,25,27,26,28,20,22,13,19,23,31,32],
-        TA: [5,6,7,8,19],
+        BD: ['1','11','12','14','9','8','10','21','31','30','16','15','18','17','25','27','26','24','28','20','22','13','23','29','32'],
+        BZ: ['25','27','26','28','20','22','13','19','23'],
+        CD: ['11','6','28','19','23'],
+        DE: ['1','12','14','9','10','21','31','16','15','18','17','24','22','19','29','32'],
+        ED: ['2A','2B','5','30'],
+        EX: ['25','27','28','20','22','13','19','23'],
+        FD: ['2A','2B','1','11','14','5','6','7','8','10','21','31','30','24','28','19','32'],
+        GD: ['2A','2B','1','14','5','7','8','31','30','19','29','32'],
+        LD: ['2A','2B','5','7','8'],
+        PR: ['29'],
+        QA: ['14','17','30'],
+        SM: ['1','11','18','25','27','26','28','20','22','13','19','23','31','32'],
+        TA: ['2A','2B','5','6','7','8','19'],
 
 
 
         /* Dummy Values */
-        DN: [2,3,3,17],
-        DP: [1],
-        CM: [2,3,4,5,6,7,8,9,12],
-        SA: [16,22,30]
+        DN: ['2','3','3','17'],
+        DP: ['1'],
+        CM: ['2','3','4','5','6','7','8','9','12'],
+        SA: ['16','22','30']
     };
     
     /* Table to get Demo Spot nubmer by Interest */
     var demoValByInterests = 
     {
-        AA: [25,20,22,13],
-        AN: [27,28,19,23,29],
-        CS: [11,12,14,9,10,21,31,16,17,25,27,26,24,28,20,22,13,19,23,29,32],
-        CM: [12,9,5,30,16,17],
-        DE: [11,12,14,9,5,6,7,8,10,21,30,16,15,18,17,26,24,20,22,19,29],
-        GM: [27,28,19,23],
+        AA: ['25','20','22','13'],
+        AN: ['27','28','19','23','29'],
+        CS: ['1','11','12','14','9','10','21','31','16','17','25','27','26','24','28','20','22','13','19','23','29','32'],
+        CM: ['12','9','5','30','16','17'],
+        DE: ['11','12','14','9','5','6','7','8','10','21','30','16','15','18','17','26','24','20','22','19','29'],
+        GM: ['27','28','19','23'],
         GI: [],
-        LP: [14,15,18],
-        MD: [30,15,18,26],
-        MM: [11,10,25,27,24,28,20,22,13,19,23],
-        MT: [11,12,14,9,6,7,8,21,31,30,19,29,32],
-        MP: [11,12,14,9,10,16,17,25,24,22,13],
-        NP: [15],
-        RG: [11,14,21,16,15,18,17],
-        SD: [15,26],
-        TL: [29],
+        LP: ['14','15','18'],
+        MD: ['30','15','18','26'],
+        MM: ['11','10','25','27','24','28','20','22','13','19','23'],
+        MT: ['1','11','12','14','9','6','7','8','21','31','30','19','29','32'],
+        MP: ['11','12','14','9','10','16','17','25','24','22','13'],
+        NP: ['15'],
+        RG: ['11','14','21','16','15','18','17'],
+        SD: ['15','26'],
+        TL: ['29'],
         TE: [],
-        VA: [5,6]
+        VA: ['5','6']
     };
 
     /* Life Cycle value mapping */
@@ -768,7 +803,9 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
 /* Get a list of weights range for each recommended demo for Attendee */
 var getDemoWeights = function (demos) {
     /**
+     * -----------------
      * demoWeightsTable:
+     * -----------------
      *  "key" : "value"
      *      key = DemoStation / Demo Spot / Demo Index Number
      *      value = Demo Life Cycle range

@@ -143,6 +143,7 @@ var saveAttendee = function (req, res) {
                     attendeeData.redemptions = [];
                     attendeeData.extraQuestionnaire = 'false';
                     attendeeData.hasSeenRegistrationRequest = 'false';
+                    attendeeData.tapEvents = [];
                 }
 
                 return attendeeData;
@@ -222,7 +223,7 @@ var saveAttendeeRegistrationStatus = function (req, res) {
             } else {
                 data = "Failed!";
             }
-            res.redirect("/attendee");
+            res.send("data");
         })
         .catch(function (error) {
             res.status(httpStatus.BAD_REQUEST);
@@ -605,6 +606,48 @@ var flagAttendeeHasSeenRegistrationRequest = function (req, res) {
 
 
 
+/**
+ * POST /api/attendee/flagAttendeeHasSeenRegistrationRequest
+ * Update Attendee's 'hasSeenRegistrationRequest' field as true
+ **/
+var logTapEventForAttendee = function (req, res) {
+    var attendee = req.body.attendee;
+    var demoStationPiId = req.body.demoStationPiId;
+    var timeStamp = req.body.timeStamp;
+
+    var getDemoStation = function () {
+        return DemoStation.getDemoStationByPiId(demoStationPiId)
+            .then(function (demoStation) {
+                return demoStation;
+            });
+    };
+
+    var logTapEvent = function (demoStation) {
+        var request = {
+            attendee: attendee,
+            demoStationObj: demoStation,
+            timeStamp: timeStamp
+        };
+        
+        return Attendee.logTapEvent(request)
+            .then(function (data) {
+                return data;
+            });
+    };
+
+    return getDemoStation()
+        .then(logTapEvent)
+        .then(function (data) {
+            res.send(data);
+        })
+        .catch(function (error) {
+            throw error;
+        });
+};
+
+
+
+
 
 AttendeeExports = {
     attendees: attendees,
@@ -617,7 +660,8 @@ AttendeeExports = {
     saveAttendeeExtraQuestionnaire: saveAttendeeExtraQuestionnaire,
     redeemPrize: redeemPrize,
     deleteAttendeeByBadgeId: deleteAttendeeByBadgeId,
-    flagAttendeeHasSeenRegistrationRequest: flagAttendeeHasSeenRegistrationRequest
+    flagAttendeeHasSeenRegistrationRequest: flagAttendeeHasSeenRegistrationRequest,
+    logTapEventForAttendee: logTapEventForAttendee
 };
 
 module.exports = AttendeeExports;

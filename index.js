@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logger = require('tracer').colorConsole();
-var port = process.env.PORT || 2001;
+var port = process.env.PORT || 2002;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

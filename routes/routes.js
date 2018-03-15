@@ -42,6 +42,8 @@ router.route('/attendee/badgeId/:badgeId/demo/:demoId').post(attendeeExports.sav
 /**/ router.route('/attendee/logDemoByDemoStation').post(attendeeExports.saveAttendeeDemoByPiId); 
 router.route('/attendee/badgeId/:badgeId/redeemPrize/:prizeId').post(attendeeExports.redeemPrize);
 router.route('/attendee/flagAttendeeHasSeenRegistrationRequest').post(attendeeExports.flagAttendeeHasSeenRegistrationRequest);
+router.route('/attendee/logTapEventForAttendee').post(attendeeExports.logTapEventForAttendee);
+
 
 
 router.route('/attendee/badgeId/:badgeId').delete(attendeeExports.deleteAttendeeByBadgeId);
