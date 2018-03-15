@@ -144,6 +144,7 @@ var saveAttendee = function (req, res) {
                     attendeeData.extraQuestionnaire = 'false';
                     attendeeData.hasSeenRegistrationRequest = 'false';
                     attendeeData.tapEvents = [];
+                    attendeeData.note = "";
                 }
 
                 return attendeeData;
@@ -647,6 +648,51 @@ var logTapEventForAttendee = function (req, res) {
 
 
 
+/**
+ * POST /api/attendee/badgeId/:id/addNote
+ * Update Attendee's 'hasSeenRegistrationRequest' field as true
+ * 
+ * Expects: 
+ *      {
+ *          note: "Here is some note"
+ *      }
+ **/
+var addNote = function (req, res) {
+    var badgeId = req.params.id;
+    var note = req.body.note;
+
+    return Attedee.addNote(badgeId, note)
+        .then(function (data) {
+            res.send(data);
+        })
+        .catch(function (error) {
+            throw error;
+        });
+};
+
+
+
+/**
+ * POST /api/attendee/badgeId/:id/deductPoints
+ * Update Attendee's pointsAccumulated
+ * 
+ * Expects: 
+ *      {
+ *          points: 1000
+ *      }
+ **/
+var deductPoints = function (req, res) {
+    var badgeId = req.params.id;
+    var points = req.body.points;
+
+    return Attedee.deductPoints(badgeId, points)
+        .then(function (data) {
+            res.send(data);
+        })
+        .catch(function (error) {
+            throw error;
+        });
+};
 
 
 AttendeeExports = {
@@ -661,7 +707,9 @@ AttendeeExports = {
     redeemPrize: redeemPrize,
     deleteAttendeeByBadgeId: deleteAttendeeByBadgeId,
     flagAttendeeHasSeenRegistrationRequest: flagAttendeeHasSeenRegistrationRequest,
-    logTapEventForAttendee: logTapEventForAttendee
+    logTapEventForAttendee: logTapEventForAttendee,
+    addNote: addNote,
+    deductPoints: deductPoints
 };
 
 module.exports = AttendeeExports;

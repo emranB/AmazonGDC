@@ -35,7 +35,8 @@ var AttendeeSchema = new Schema({
     extraQuestionnaire: Object,
     creationTime: String,
     hasSeenRegistrationRequest: String,
-    tapEvents: Object
+    tapEvents: Object,
+    note: String
 }, 
 {
     collection: 'attendee',
@@ -516,6 +517,34 @@ var logTapEvent = function (request) {
 
 
 
+var addNote = function (badgeId, note) {
+    return AttendeeModel.update(
+        {badgeNumber: badgeId},
+        {
+            $set: {
+                note: note
+            }
+        },
+        {upsert: false, new: true}
+    ).exec();
+};
+
+
+
+var deductPoints = function (badgeId, points) {
+    return AttendeeModel.update(
+        {badgeNumber: badgeId},
+        {
+            $inc: {
+                pointsAccumulated: -points
+            }
+        },
+        {upsert: false, new: true}
+    ).exec();
+};
+
+
+
 /**
  * Create Object with all member functions
  */
@@ -530,7 +559,9 @@ Attendee = {
     postAttendeeExtraQuestionnaire: postAttendeeExtraQuestionnaire,
     deleteByBadgeId: deleteByBadgeId,
     flagAttendeeHasSeenRegistrationRequest: flagAttendeeHasSeenRegistrationRequest,
-    logTapEvent: logTapEvent
+    logTapEvent: logTapEvent,
+    addNote: addNote,
+    deductPoints: deductPoints
 };
 
 

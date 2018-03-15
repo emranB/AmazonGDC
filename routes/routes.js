@@ -43,6 +43,8 @@ router.route('/attendee/badgeId/:badgeId/demo/:demoId').post(attendeeExports.sav
 router.route('/attendee/badgeId/:badgeId/redeemPrize/:prizeId').post(attendeeExports.redeemPrize);
 router.route('/attendee/flagAttendeeHasSeenRegistrationRequest').post(attendeeExports.flagAttendeeHasSeenRegistrationRequest);
 router.route('/attendee/logTapEventForAttendee').post(attendeeExports.logTapEventForAttendee);
+router.route('/attendee/badgeId/:id/addNote').post(attendeeExports.addNote);
+router.route('/attendee/badgeId/:id/deductPoints').post(attendeeExports.deductPoints);
 
 
 
