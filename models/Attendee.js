@@ -799,27 +799,38 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
     });
 
     /* Get the demos that have been weighted more than 0 */
-    var demosWeightedAboveZero = uniqueDemoWeightsForAllLifeCycles.map(function (demo) {
-        if (demo.weight > 0) {
-            return demo;
-        }
-    }); 
+    var demosWeightedAboveZero = [];
+    if (uniqueDemoWeightsForAllLifeCycles.length) {
+        demosWeightedAboveZero = uniqueDemoWeightsForAllLifeCycles.filter(function (demo) {
+            if (demo.weight > 0) {
+                return demo;
+            }
+        }); 
+    }
 
-    var topSixRecommendedDemos = demosWeightedAboveZero.map(function (demo) {
-        return demo.demoSpot;
-    }).slice(0, 6);
+    var topSixRecommendedDemos = [];
+    if (demosWeightedAboveZero.length > 0) {
+        topSixRecommendedDemos = demosWeightedAboveZero.map(function (demo) {
+            return demo.demoSpot;
+        }).slice(0, 6);
+    }
 
     if (demosWeightedAboveZero.length < 6) {
-        var demosWeightedAboveZero_demoSpots = demosWeightedAboveZero.map(function (demo) {
-            return demo.demoSpot;
-        });
+        var demosWeightedAboveZero_demoSpots = [];
+        var demosNotRecommendedToAttendee = [];
 
-        var demosNotRecommendedToAttendee = allRecommendableDemos.filter(function (demo) {
+        if (demosWeightedAboveZero.length) {
+            demosWeightedAboveZero_demoSpots = demosWeightedAboveZero.map(function (demo) {
+                return demo.demoSpot;
+            });
+        }
+
+        demosNotRecommendedToAttendee = allRecommendableDemos.filter(function (demo) {
             return demosWeightedAboveZero_demoSpots.indexOf(demo) == -1;
         });
-
+        
         shuffle(demosNotRecommendedToAttendee);
-
+        
         var additionalDemosRequiredCount = 6 - demosWeightedAboveZero_demoSpots.length;
         var additionalDemos = demosNotRecommendedToAttendee.slice(0, additionalDemosRequiredCount);
         additionalDemos.map(function (demo) {
