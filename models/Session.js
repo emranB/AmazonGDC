@@ -50,8 +50,8 @@ var authorizeRfid = function (request) {
      *  - NdefRecord (<- lower case 'd')
      */
     var params = {
-        ActivationCode: "7C86979",      // Production API
-        // ActivationCode: "4186598",      // Test API
+        // ActivationCode: "7C86979",      // Production API
+        ActivationCode: "4186598",      // Test API
         AuthKey: "CurrentStudios_1",
         DeviceIdentifier: "Test",
         NdefRecord: NDefRec
