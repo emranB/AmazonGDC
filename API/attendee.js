@@ -136,7 +136,6 @@ var saveAttendee = function (req, res) {
                     attendeeData.questionnaire = questionnaire;
                     attendeeData.demos = [];
                     attendeeData.creationTime = new Date().toLocaleString();
-                    // attendeeData.recommendedDemos = getRecommendedDemosForAttendee(attendeeData.title, attendeeData.questionnaire);
                     attendeeData.recommendedDemos = [];
                     attendeeData.pointsAccumulated = 0;
                     attendeeData.pointsCount = 0;
@@ -198,18 +197,18 @@ var saveAttendeeRegistrationStatus = function (req, res) {
 
     /*****************************************************
      * Dummy Value */
-    registrationData = 
-    {
-         "scanned"   : "true",
-         "terms"     : "true",
-         "answer_0"  : "Student",
-         "answer_1"  : "Network Protection/Tolerance,Services Deployment,Testing Lifecycle",
-         "answer_2"  : "Alpha Production,Beta Production,Feedback testing",
-         "answer_3"  : "answer 3 here",
-         "answer_4"  : "answer 4 here",
-         "answer_5"  : "answer 5 here",
-         "complete" : "false"
-    };
+    // registrationData = 
+    // {
+    //      "scanned"   : "true",
+    //      "terms"     : "true",
+    //      "answer_0"  : "Student",
+    //      "answer_1"  : "Network Protection/Tolerance,Services Deployment,Testing Lifecycle",
+    //      "answer_2"  : "Alpha Production,Beta Production,Feedback testing",
+    //      "answer_3"  : "answer 3 here",
+    //      "answer_4"  : "answer 4 here",
+    //      "answer_5"  : "answer 5 here",
+    //      "complete" : "false"
+    // };
     /**/
 
     var attendeeObj = {
@@ -538,27 +537,26 @@ var redeemPrize = function (req, res) {
 /**
  * POST /api/attendee/badgeId/:id/extraQuestionnaire
  * Update Attendee's profile by appending info about Exit Questionnaire
+ * 
+ * Expects:
+ * extraQuestionnaireObj = [
+ *      {
+ *           question_0: "This is question 0",
+ *           answer_0: "This is answer 0"
+ *      },
+ *      {
+ *          question_1: "This is question 1",
+ *          answer_1: "This is answer 1"
+ *      },
+ *      {
+ *          question_2: "This is question 2",
+ *          answer_2: "This is answer 2"
+ *      }
+ *  ];
  **/
 var saveAttendeeExtraQuestionnaire = function (req, res) {
     var badgeNumber = req.params.id;
     var extraQuestionnaireObj = req.body.extraQuestionnaireObj;
-    
-    /****************** Dummy values ******************/
-    extraQuestionnaireObj = [
-        {
-            question_0: "This is question 0",
-            answer_0: "This is answer 0"
-        },
-        {
-            question_1: "This is question 1",
-            answer_1: "This is answer 1"
-        },
-        {
-            question_2: "This is question 2",
-            answer_2: "This is answer 2"
-        }
-    ];
-    /**************************************************/
 
     return Attendee.postAttendeeExtraQuestionnaire(badgeNumber, extraQuestionnaireObj)
         .then(function (response) {
