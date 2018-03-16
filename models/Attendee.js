@@ -629,7 +629,8 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
         "Data Network Consultant":      "DN",
         "Director Product Marketing":   "DP",
         "Client Manager":               "CM",
-        "Senior Account Executive":     "SA"
+        "Senior Account Executive":     "SA",
+        "Senior Director":              "SD"
     };
 
     /* Access 'interestsTags' using 'interestsTags[interest]' */
@@ -677,10 +678,11 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
 
 
         /* Dummy Values */
-        DN: ['2','3','3','17'],
+        DN: ['17'],
         DP: ['1'],
-        CM: ['2','3','4','5','6','7','8','9','12'],
-        SA: ['16','22','30']
+        CM: ['5','6','7','8','9','12'],
+        SA: ['16','22','30'],
+        SD: ['6','7','8']
     };
     
     /* Table to get Demo Spot nubmer by Interest */
@@ -736,7 +738,8 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
         return question.key == "interests";
     });
     if (interests.answer) {
-        interests = interests.answer.split(",");
+        interests = interests.answer.split("_");
+        // interests = interests.answer.split(",");
         interests = interests.map(function (interest) {
             interest = interest.trim();
             return interestsTags[interest];
@@ -1007,6 +1010,11 @@ var getDemoWeightsByLifeCycles = function (lifeCycles, demos, demoWeightsTable) 
         for (var j=0; j<allUniqueDemos.length; j++) {
             var demo = allUniqueDemos[j];
             var demoWeightsScale = demoWeightsTable[demo];
+            console.log(demo, demoWeightsScale);
+            
+            if (!demoWeightsScale) {
+                break;
+            }
 
             var demoWeightCoefficientForLifeCycle = demoWeightsScale.find(function (item) {
                 return item.lifeCycleVal == parseInt(lifeCycle);
