@@ -682,6 +682,7 @@ var addNote = function (req, res) {
 var deductPoints = function (req, res) {
     var badgeId = req.params.id;
     var points = req.body.points;
+    console.log(badgeId, points);
 
     return Attendee.deductPoints(badgeId, points)
         .then(function (data) {

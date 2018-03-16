@@ -229,6 +229,8 @@ var postAttendeeDemo = function (data) {
     var badgeId = data.badgeId;
     var dataDemo = data.demo;
 
+    console.log("here", badgeId, dataDemo);
+    
     /* Get a list of IDs of Demos that have already been viewed by Attendee */
     var getAttendeeDemoViews = function () {
         return getAttendeeByBadgeId(badgeId)
@@ -532,11 +534,12 @@ var addNote = function (badgeId, note) {
 
 
 var deductPoints = function (badgeId, points) {
+    points = parseInt(points);
     return AttendeeModel.update(
         {badgeNumber: badgeId},
         {
             $inc: {
-                pointsAccumulated: -points
+                pointsCount: -points
             }
         },
         {upsert: false, new: true}
@@ -592,13 +595,6 @@ function shuffle(a) {
 
 /* Get recommended demos for an Attendee, based on job title and interests */ 
 var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
-
-
-    /**
-     * Dummy Value
-     *********************/
-    jobTitle = "Animator";
-    /*********************/
 
     /* A list of all recommendable Demo Spots */
     var allRecommendableDemos = 
