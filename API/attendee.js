@@ -557,6 +557,7 @@ var redeemPrize = function (req, res) {
 var saveAttendeeExtraQuestionnaire = function (req, res) {
     var badgeNumber = req.params.id;
     var extraQuestionnaireObj = req.body;
+    console.log("saveAttendeeExtraQuestionnaire() says: ", badgeNumber, extraQuestionnaireObj);
 
     return Attendee.postAttendeeExtraQuestionnaire(badgeNumber, extraQuestionnaireObj)
         .then(function (response) {

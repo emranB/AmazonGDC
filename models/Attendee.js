@@ -266,21 +266,39 @@ var postAttendeeDemo = function (data) {
      *                                          - Set dataDemo.checkedOut = false
      *                                          - Push dataDemo into Attendee object
      *          CASE 1.A.ii: dataDemo does NOT require Check Out
-     *              CASE 1.A.ii.1: dataDemo has occurred in viewedDemos
-     *                              - Push dataDemo into Attendee object  
-     *              CASE 1.A.ii.2: dataDemo has NOT occurred in viewedDemos
-     *                              - Push dataDemo into Attendee object    
-     *                              - Increment attendee.pointAccumulated             
-     *                              - Increment attendee.pointsCount          
+     * 
+     *              CASE 1.A.ii.1: IF dataDemo.index == (3 || 4 || 33 || 34)
+     *                                  - Set dataDemo.allowMultiplePointsCollection = false
+     *                                  IF dataDemo._id exists in viewedDemoIds
+     *                                      - Push dateDemo into Attendee Object
+     *                                  ELSE
+     *                                      - Push dateDemo into Attendee Object              
+     *                                      - Increment attendee.pointAccumulated             
+     *                                      - Increment attendee.pointsCount 
+     *                             ELSE
+     *                                  - Set dataDemo.allowMultiplePointsCollection = true
+     *                                  - Push Demo into Attendee Object              
+     *                                  - Increment attendee.pointAccumulated             
+     *                                  - Increment attendee.pointsCount 
+     *       
      *      CASE 1.B: Attendee does NOT have any viewedDemos
      *          CASE 1.B.i: dataDemo requires Check Out
      *                          - Set dataDemo.checkedIn = true
      *                          - Set dataDemo.checkedOut = false
      *                          - Push dataDemo into Attendee object
      *          CASE 1.B.ii: dataDemo does NOT require Check Out
-     *                          - Push dataDemo into Attendee object              
-     *                          - Increment attendee.pointAccumulated             
-     *                          - Increment attendee.pointsCount 
+     * 
+     *              CASE 1.B.ii.1: IF dataDemo.index == (3 || 4 || 33 || 34)
+     *                                  - Set dataDemo.allowMultiplePointsCollection = false
+     *                                  - Push Demo into Attendee Object              
+     *                                  - Increment attendee.pointAccumulated             
+     *                                  - Increment attendee.pointsCount 
+     *                             ELSE
+     *                                  - Set dataDemo.allowMultiplePointsCollection = true
+     *                                  - Push Demo into Attendee Object              
+     *                                  - Increment attendee.pointAccumulated             
+     *                                  - Increment attendee.pointsCount 
+     * 
      * return dataDemo   
      * 
      * CASE 2: Does not have dataDemo
@@ -372,19 +390,49 @@ var postAttendeeDemo = function (data) {
                     ).exec();
                 }
             } else {
-                return AttendeeModel.findOneAndUpdate(
-                    {badgeNumber: badgeId},
-                    {
-                        $push: {
-                            demos: dataDemo
+                if (dataDemo.index == "3" || dataDemo.index == "4" || dataDemo.index == "33" || dataDemo.index == "34") {
+                    dataDemo.allowMultiplePointsCollection = "false";
+                    if (viewedDemoIds.indexOf(dataDemo._id) != -1) { /* If Attendee has previously viewed the Demo */
+                        return AttendeeModel.findOneAndUpdate(
+                            {badgeNumber: badgeId},
+                            {
+                                $push: {
+                                    demos: dataDemo
+                                }
+                            },
+                            {new: true}
+                        ).exec();
+                    } else {
+                        return AttendeeModel.findOneAndUpdate(
+                            {badgeNumber: badgeId},
+                            {
+                                $push: {
+                                    demos: dataDemo
+                                },
+                                $inc: {
+                                    pointsCount: dataDemo.points,
+                                    pointsAccumulated: dataDemo.points
+                                }
+                            },
+                            {new: true}
+                        ).exec();
+                    }
+                } else {
+                    dataDemo.allowMultiplePointsCollection = "true";
+                    return AttendeeModel.findOneAndUpdate(
+                        {badgeNumber: badgeId},
+                        {
+                            $push: {
+                                demos: dataDemo
+                            },
+                            $inc: {
+                                pointsCount: dataDemo.points,
+                                pointsAccumulated: dataDemo.points
+                            }
                         },
-                        $inc: {
-                            pointsCount: dataDemo.points,
-                            pointsAccumulated: dataDemo.points
-                        }
-                    },
-                    {new: true}
-                ).exec();
+                        {new: true}
+                    ).exec();
+                }
             }
         } else { /* If Attendee does NOT have any viewedDemos */
             if (dataDemo.requireCheckout == "true") { /* If dataDemo requires Check Out */
@@ -400,6 +448,11 @@ var postAttendeeDemo = function (data) {
                     {new: true}
                 ).exec();
             } else { /* If dataDemo does NOT require Check Out */
+                if (dataDemo.index == "3" || dataDemo.index == "4" || dataDemo.index == "33" || dataDemo.index == "34") {
+                    dataDemo.allowMultiplePointsCollection = "false";
+                } else {
+                    dataDemo.allowMultiplePointsCollection = "true"
+                }
                 return AttendeeModel.findOneAndUpdate(
                     {badgeNumber: badgeId},
                     {
@@ -457,6 +510,7 @@ var postAttendeeExtraQuestionnaire = function (badgeNumber, questionnaireArray) 
         console.log("Must provide Badge Number");
         throw "Must provide Badge Number";
     }
+    console.log(badgeNumber, questionnaireArray);
 
     return AttendeeModel.findOneAndUpdate(
         {badgeNumber: badgeNumber},
@@ -599,10 +653,10 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
     /* A list of all recommendable Demo Spots */
     var allRecommendableDemos = 
     [
-        '5','6','7','8','9','10','11','12',
-        '13','14','15','16','17','18','19',
-        '20','21','22','23','24','25','26',
-        '27','28','29','30','31','32'
+        '1','2A','2B','5','6','7','8','9',
+        '10','11','12','13','14','15','16',
+        '17','18','19','20','21','22','23',
+        '24','25','26','27','28','29','30','31','32'
     ];
 
     /* Access 'jobTag' using: 'jobTag[jobTitle]' */
@@ -636,7 +690,7 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
     /* Access 'interestsTags' using 'interestsTags[interest]' */
     var interestsTags = 
     {
-        "Analytics (Game, Server)":         "AN",       /* " (Game, Ser...)"  <-  The comma is a problematic issue, becasue strings are broken down by the commas. Consider asking front end to send JSON instead of string */
+        "Analytics (Game, Server)":         "AN",
         "Audio Arts":                       "AA",
         "Cloud Services":                   "CS",
         "Console/Mobile Market":            "CM",
@@ -678,11 +732,11 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
 
 
         /* Dummy Values */
-        DN: ['17'],
-        DP: ['1'],
-        CM: ['5','6','7','8','9','12'],
-        SA: ['16','22','30'],
-        SD: ['6','7','8']
+        DN: ['2A','17'],
+        DP: ['2A','1'],
+        CM: ['2B','5','6','7','8','9','12'],
+        SA: ['2A','16','22','30'],
+        SD: ['2B','6','7','8']
     };
     
     /* Table to get Demo Spot nubmer by Interest */
@@ -691,8 +745,8 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
         AA: ['25','20','22','13'],
         AN: ['27','28','19','23','29'],
         CS: ['1','11','12','14','9','10','21','31','16','17','25','27','26','24','28','20','22','13','19','23','29','32'],
-        CM: ['12','9','5','30','16','17'],
-        DE: ['11','12','14','9','5','6','7','8','10','21','30','16','15','18','17','26','24','20','22','19','29'],
+        CM: ['2A','2B','12','9','5','30','16','17'],
+        DE: ['2A','2B','11','12','14','9','5','6','7','8','10','21','30','16','15','18','17','26','24','20','22','19','29'],
         GM: ['27','28','19','23'],
         GI: [],
         LP: ['14','15','18'],
@@ -705,7 +759,7 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
         SD: ['15','26'],
         TL: ['29'],
         TE: [],
-        VA: ['5','6']
+        VA: ['2A','2B','5','6']
     };
 
     /* Life Cycle value mapping */
@@ -739,7 +793,6 @@ var getRecommendedDemosForAttendee =  function (jobTitle, questionnaire) {
     });
     if (interests.answer) {
         interests = interests.answer.split("_");
-        // interests = interests.answer.split(",");
         interests = interests.map(function (interest) {
             interest = interest.trim();
             return interestsTags[interest];
